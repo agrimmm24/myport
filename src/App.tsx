@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import WelcomePage from './components/WelcomePage';
+import CodeLogoPage from './components/CodeLogoPage';
 import HeroSection from './components/HeroSection';
 import Navigation from './components/Navigation';
 import AboutSection from './components/AboutSection';
@@ -13,13 +14,13 @@ import ContactSection from './components/ContactSection';
 import './App.css';
 
 function App() {
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [currentPage, setCurrentPage] = useState<'welcome' | 'logo' | 'main'>('welcome');
   const [activeSection, setActiveSection] = useState('hero');
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowWelcome(false);
+      setCurrentPage('logo');
     }, 4000);
 
     return () => clearTimeout(timer);
@@ -57,8 +58,12 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  if (showWelcome) {
+  if (currentPage === 'welcome') {
     return <WelcomePage />;
+  }
+
+  if (currentPage === 'logo') {
+    return <CodeLogoPage onLogoClick={() => setCurrentPage('main')} />;
   }
 
   return (

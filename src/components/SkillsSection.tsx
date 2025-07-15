@@ -10,11 +10,7 @@ const SkillsSection: React.FC = () => {
         { name: 'Python', info: 'Primary programming language for AI/ML development, data analysis, and automation scripts.' },
         { name: 'TensorFlow', info: 'Deep learning framework for building and training neural networks and machine learning models.' },
         { name: 'PyTorch', info: 'Dynamic neural network framework preferred for research and production ML applications.' },
-        { name: 'Scikit-learn', info: 'Machine learning library for classical algorithms, data preprocessing, and model evaluation.' },
-        { name: 'OpenCV', info: 'Computer vision library for image processing, object detection, and visual recognition tasks.' },
-        { name: 'NLP', info: 'Natural Language Processing for text analysis, sentiment analysis, and language understanding.' },
-        { name: 'Computer Vision', info: 'Image and video analysis, object detection, facial recognition, and visual AI applications.' },
-        { name: 'Deep Learning', info: 'Neural networks, CNNs, RNNs, transformers for complex pattern recognition and prediction.' }
+        { name: 'Scikit-learn', info: 'Machine learning library for classical algorithms, data preprocessing, and model evaluation.' }
       ]
     },
     {
@@ -23,11 +19,7 @@ const SkillsSection: React.FC = () => {
         { name: 'React', info: 'Frontend JavaScript library for building interactive user interfaces and single-page applications.' },
         { name: 'Node.js', info: 'JavaScript runtime for server-side development, APIs, and backend application logic.' },
         { name: 'Express', info: 'Web framework for Node.js to build RESTful APIs and web applications efficiently.' },
-        { name: 'MongoDB', info: 'NoSQL database for flexible, document-based data storage and scalable applications.' },
-        { name: 'PostgreSQL', info: 'Relational database for complex queries, data integrity, and enterprise applications.' },
-        { name: 'TypeScript', info: 'Typed JavaScript for better code quality, IDE support, and large-scale application development.' },
-        { name: 'REST APIs', info: 'Design and implementation of RESTful web services for client-server communication.' },
-        { name: 'GraphQL', info: 'Query language and runtime for APIs, providing efficient data fetching and real-time updates.' }
+        { name: 'MongoDB', info: 'NoSQL database for flexible, document-based data storage and scalable applications.' }
       ]
     },
     {
@@ -36,11 +28,7 @@ const SkillsSection: React.FC = () => {
         { name: 'Docker', info: 'Containerization platform for packaging applications and ensuring consistent deployment environments.' },
         { name: 'Kubernetes', info: 'Container orchestration for managing, scaling, and automating containerized applications.' },
         { name: 'AWS', info: 'Cloud computing platform for hosting, storage, databases, and various cloud-native services.' },
-        { name: 'Jenkins', info: 'Automation server for continuous integration and continuous deployment (CI/CD) pipelines.' },
-        { name: 'Git', info: 'Version control system for tracking code changes, collaboration, and project management.' },
-        { name: 'Linux', info: 'Operating system administration, shell scripting, and server management for production environments.' },
-        { name: 'CI/CD', info: 'Continuous Integration and Deployment practices for automated testing and deployment workflows.' },
-        { name: 'Infrastructure as Code', info: 'Managing infrastructure through code using tools like Terraform and CloudFormation.' }
+        { name: 'Jenkins', info: 'Automation server for continuous integration and continuous deployment (CI/CD) pipelines.' }
       ]
     },
     {
@@ -49,11 +37,7 @@ const SkillsSection: React.FC = () => {
         { name: 'VS Code', info: 'Primary code editor with extensions for development, debugging, and version control integration.' },
         { name: 'Jupyter', info: 'Interactive notebooks for data analysis, machine learning experimentation, and documentation.' },
         { name: 'Git', info: 'Distributed version control for code management, branching strategies, and team collaboration.' },
-        { name: 'Postman', info: 'API development and testing tool for designing, testing, and documenting REST APIs.' },
-        { name: 'Firebase', info: 'Backend-as-a-Service platform for authentication, real-time databases, and hosting.' },
-        { name: 'Netlify', info: 'Static site hosting and deployment platform with continuous deployment from Git repositories.' },
-        { name: 'Streamlit', info: 'Python framework for building and sharing data science and machine learning web applications.' },
-        { name: 'FastAPI', info: 'Modern Python web framework for building high-performance APIs with automatic documentation.' }
+        { name: 'Postman', info: 'API development and testing tool for designing, testing, and documenting REST APIs.' }
       ]
     }
   ];
@@ -95,7 +79,7 @@ const SkillsSection: React.FC = () => {
         ))}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .skills-container {
           display: grid;
           grid-template-columns: repeat(4, 1fr);

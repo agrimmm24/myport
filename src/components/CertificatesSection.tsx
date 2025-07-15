@@ -15,12 +15,6 @@ const CertificatesSection: React.FC = () => {
         issuer: 'DeepLearning.AI',
         description: 'Advanced neural networks, CNNs, RNNs, and deep learning frameworks for real-world applications.',
         link: '#'
-      },
-      {
-        title: 'TensorFlow Developer Certificate',
-        issuer: 'Google',
-        description: 'Professional certification demonstrating proficiency in building and deploying ML models using TensorFlow.',
-        link: '#'
       }
     ],
     'Fullstack': [
@@ -35,12 +29,6 @@ const CertificatesSection: React.FC = () => {
         issuer: 'Meta (Coursera)',
         description: 'Advanced React concepts including hooks, context, state management, and modern development practices.',
         link: '#'
-      },
-      {
-        title: 'Node.js Certification',
-        issuer: 'OpenJS Foundation',
-        description: 'Server-side JavaScript development, API design, and backend architecture best practices.',
-        link: '#'
       }
     ],
     'DevOps': [
@@ -54,12 +42,6 @@ const CertificatesSection: React.FC = () => {
         title: 'Docker Certified Associate',
         issuer: 'Docker Inc.',
         description: 'Container technology expertise covering Docker fundamentals, orchestration, and production deployment.',
-        link: '#'
-      },
-      {
-        title: 'Kubernetes Administrator',
-        issuer: 'CNCF',
-        description: 'Container orchestration, cluster management, and Kubernetes ecosystem administration skills.',
         link: '#'
       }
     ]
@@ -107,7 +89,7 @@ const CertificatesSection: React.FC = () => {
         ))}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .certificates-container {
           max-width: 1200px;
           width: 100%;

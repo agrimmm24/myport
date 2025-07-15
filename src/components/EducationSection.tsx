@@ -8,7 +8,7 @@ const EducationSection: React.FC = () => {
       type: 'SCHOOL',
       institution: 'SKD Academy',
       location: 'Gomti Nagar, Lucknow',
-      period: '2018 - 2022',
+      period: '2019 - 2023',
       description: 'Completed higher secondary education with focus on Science and Mathematics. Participated in various technical competitions and coding events.',
       achievements: ['Science Stream Topper', 'Programming Club President', 'Mathematics Olympiad Participant']
     },
@@ -17,7 +17,7 @@ const EducationSection: React.FC = () => {
       type: 'COLLEGE',
       institution: 'Vivekananda Global University',
       location: 'Jaipur, Rajasthan',
-      period: '2022 - Present',
+      period: '2024 - Present',
       description: 'Pursuing B.Tech in Artificial Intelligence & Data Science. Active member of coding club and technical societies.',
       achievements: ['Dean\'s List', 'AI/ML Research Assistant', 'Hackathon Winner']
     }
@@ -65,7 +65,7 @@ const EducationSection: React.FC = () => {
         ))}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .education-container {
           display: flex;
           flex-direction: column;

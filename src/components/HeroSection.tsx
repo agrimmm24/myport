@@ -67,14 +67,20 @@ const HeroSection: React.FC = () => {
             <span className="cursor">|</span>
           </p>
           
-          <button className="download-resume-btn">
+          <a
+            className="download-resume-btn"
+            href="/Resume.pdf"
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Download size={20} />
             Download Resume
-          </button>
+          </a>
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .hero-section {
           min-height: 100vh;
           display: flex;
