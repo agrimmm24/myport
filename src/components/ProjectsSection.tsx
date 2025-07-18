@@ -40,6 +40,14 @@ const ProjectsSection: React.FC = () => {
         image: '/Medi1.png',
         viewCode: true,
         output: true
+      },
+      {
+        title: 'Real-Time RAM Monitor',
+        techStack: ['Python', 'Streamlit', 'psutil'],
+        description: 'Monitor your system RAM usage in real-time with a live updating dashboard. See total, used, and available RAM with a progress bar.',
+        image: '/ram1.png',
+        viewCode: true,
+        output: true
       }
     ],
     Fullstack: [
@@ -108,6 +116,10 @@ const ProjectsSection: React.FC = () => {
   const [showGeminiCodeModal, setShowGeminiCodeModal] = useState(false);
   const [showGeminiOutputModal, setShowGeminiOutputModal] = useState(false);
   const geminiChatbotCode = `import streamlit as st\n\nimport requests\n\nfrom bs4 import BeautifulSoup\n\nfrom openai import OpenAI\n\n# API key for Gemini (you should consider using st.secrets in real apps for security)\ngemini_api_key = \"AIzaSyCqhhxWutn3J8sjtZHYf3Ayky0DePdtTP0\"\n\n# Get content from 1mg\nresponse = requests.get(\"https://www.1mg.com\")\nhtmlaicontent = response.text\nmysoup = BeautifulSoup(markup=htmlaicontent, features=\"html.parser\")\n\n# Set up the Gemini model through OpenAI interface\ngemini_model = OpenAI(\n    base_url=\"https://generativelanguage.googleapis.com/v1beta/openai/\",\n    api_key=gemini_api_key\n)\n\n# Define the chatbot function\ndef chatbot(userprompt):\n    my_msg = [\n        {\"role\": \"system\", \"content\": f\"you are AI assistent, your duty is to give the information about medicines available or not and thier salts ,take your content from: {htmlaicontent}\"},\n        {\"role\": \"user\", \"content\": userprompt}\n    ]\n    response = gemini_model.chat.completions.create(model=\"gemini-2.5-flash\", messages=my_msg)\n    return response.choices[0].message.content\n\n# Streamlit UI\nst.title(\"Medicine Info Chatbot (Gemini)\")\n\nuser_input = st.text_input(\"Ask about any medicine:\", placeholder=\"e.g., tell me about paracetamol\")\n\nif user_input:\n    with st.spinner(\"Thinking...\"):\n        answer = chatbot(user_input)\n    st.markdown(\"### Answer:\")\n    st.write(answer)\n`;
+
+  const [showRamCodeModal, setShowRamCodeModal] = useState(false);
+  const [showRamOutputModal, setShowRamOutputModal] = useState(false);
+  const ramMonitorCode = `import streamlit as st\nimport psutil\nimport time\n\nst.set_page_config(page_title=\"RAM Monitor\", layout=\"centered\")\n\nst.title(\"💾 Real-Time RAM Monitor\")\n\nplaceholder = st.empty()\n\nwhile True:\n    mem = psutil.virtual_memory()\n    \n    total = mem.total / (1024 ** 3)\n    available = mem.available / (1024 ** 3)\n    used = mem.used / (1024 ** 3)\n    percent = mem.percent\n\n    with placeholder.container():\n        st.metric(label=\"Total RAM\", value=f\"{total:.2f} GB\")\n        st.metric(label=\"Used RAM\", value=f\"{used:.2f} GB\")\n        st.metric(label=\"Available RAM\", value=f\"{available:.2f} GB\")\n        st.progress(percent / 100.0, text=f\"{percent}% Used\")\n\n    time.sleep(1)\n`;
 
   return (
     <section id="projects" className="section">
@@ -179,6 +191,16 @@ const ProjectsSection: React.FC = () => {
                             Output
                           </button>
                         )}
+                        {project.title === 'Real-Time RAM Monitor' && project.viewCode && (
+                          <button className="view-code-btn" onClick={() => setShowRamCodeModal(true)}>
+                            View Code
+                          </button>
+                        )}
+                        {project.title === 'Real-Time RAM Monitor' && project.output && (
+                          <button className="output-btn" onClick={() => setShowRamOutputModal(true)}>
+                            Output
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -224,6 +246,25 @@ const ProjectsSection: React.FC = () => {
             <img src="/Medi.png" alt="Medicine Info Chatbot Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
             <p>This Streamlit app allows you to ask about any medicine. It uses Gemini AI and live data from 1mg.com to answer your queries about medicine availability and their salts.</p>
             <button onClick={() => setShowGeminiOutputModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showRamCodeModal && (
+        <div className="modal-overlay" onClick={() => setShowRamCodeModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Real-Time RAM Monitor - Streamlit Code</h3>
+            <pre style={{ maxHeight: '400px', overflow: 'auto', background: '#222', color: '#0ff', padding: '1rem', borderRadius: '8px' }}>{ramMonitorCode}</pre>
+            <button onClick={() => setShowRamCodeModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showRamOutputModal && (
+        <div className="modal-overlay" onClick={() => setShowRamOutputModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Real-Time RAM Monitor - Output</h3>
+            <img src="/ram.jpg" alt="RAM Monitor Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+            <p>This Streamlit app displays your system's RAM usage in real-time, updating every second. It shows total, used, and available RAM, along with a live progress bar.</p>
+            <button onClick={() => setShowRamOutputModal(false)} className="close-modal-btn">Close</button>
           </div>
         </div>
       )}
