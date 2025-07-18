@@ -26,7 +26,7 @@ const WelcomePage: React.FC = () => {
         </div>
       </div>
       
-      <style jsx>{`
+      <style>{`
         .welcome-page {
           position: fixed;
           top: 0;
@@ -55,7 +55,7 @@ const WelcomePage: React.FC = () => {
           position: absolute;
           width: 1px;
           height: 100vh;
-          background: linear-gradient(to bottom, transparent, #00FFFF, transparent);
+          background: linear-gradient(to bottom, transparent, #fff, transparent);
           animation: diagonalMove 3s linear infinite;
         }
 

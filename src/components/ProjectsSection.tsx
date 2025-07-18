@@ -48,6 +48,14 @@ const ProjectsSection: React.FC = () => {
         image: '/ram.jpg', // swapped: now thumbnail
         viewCode: true,
         output: true
+      },
+      {
+        title: 'Instagram Poster',
+        techStack: ['Python', 'Streamlit'],
+        description: 'Post to Instagram with a simple Streamlit app. Enter your username, password, caption, and upload an image or video. Preview your post before submission (mocked).',
+        image: '/insta1.jpg',
+        viewCode: true,
+        output: true
       }
     ],
     Fullstack: [
@@ -120,6 +128,10 @@ const ProjectsSection: React.FC = () => {
   const [showRamCodeModal, setShowRamCodeModal] = useState(false);
   const [showRamOutputModal, setShowRamOutputModal] = useState(false);
   const ramMonitorCode = `import streamlit as st\nimport psutil\nimport time\n\nst.set_page_config(page_title=\"RAM Monitor\", layout=\"centered\")\n\nst.title(\"💾 Real-Time RAM Monitor\")\n\nplaceholder = st.empty()\n\nwhile True:\n    mem = psutil.virtual_memory()\n    \n    total = mem.total / (1024 ** 3)\n    available = mem.available / (1024 ** 3)\n    used = mem.used / (1024 ** 3)\n    percent = mem.percent\n\n    with placeholder.container():\n        st.metric(label=\"Total RAM\", value=f\"{total:.2f} GB\")\n        st.metric(label=\"Used RAM\", value=f\"{used:.2f} GB\")\n        st.metric(label=\"Available RAM\", value=f\"{available:.2f} GB\")\n        st.progress(percent / 100.0, text=f\"{percent}% Used\")\n\n    time.sleep(1)\n`;
+
+  const [showInstaCodeModal, setShowInstaCodeModal] = useState(false);
+  const [showInstaOutputModal, setShowInstaOutputModal] = useState(false);
+  const instaPosterCode = `import streamlit as st\n\nst.set_page_config(page_title=\"Instagram Poster\", page_icon=\"\ud83d\udcf8\", layout=\"centered\")\n\nst.title(\"\ud83d\udcf8 Instagram Poster\")\n\n# Input fields\nusername = st.text_input(\"Instagram Username\")\npassword = st.text_input(\"Password\", type=\"password\")\ncaption = st.text_area(\"Post Caption\")\nmedia = st.file_uploader(\"Upload Image/Video\", type=[\"jpg\", \"jpeg\", \"png\", \"mp4\"])\n\n# Submit Button\nif st.button(\"Submit Post\"):\n    if not username or not password or not caption:\n        st.warning(\"Please fill in all fields (username, password, caption).\")\n    else:\n        st.success(\"\u2705 Your post has been submitted to Instagram (Mocked).\")\n        st.write(\"### \ud83d\udcc4 Post Preview\")\n        st.write(f\"**Username:** {username}\")\n        st.write(f\"**Caption:** {caption}\")\n        if media:\n            st.write(f\"**Uploaded File:** {media.name}\")\n            if media.type.startswith(\"image/\"):\n                st.image(media, caption=\"Uploaded Image\", use_column_width=True)\n            \n            elif media.type == \"video/mp4\":\n                st.video(media)\n            else:\n                st.warning(\"Unsupported file type for preview.\")\n`;
 
   return (
     <section id="projects" className="section">
@@ -201,6 +213,16 @@ const ProjectsSection: React.FC = () => {
                             Output
                           </button>
                         )}
+                        {project.title === 'Instagram Poster' && project.viewCode && (
+                          <button className="view-code-btn" onClick={() => setShowInstaCodeModal(true)}>
+                            View Code
+                          </button>
+                        )}
+                        {project.title === 'Instagram Poster' && project.output && (
+                          <button className="output-btn" onClick={() => setShowInstaOutputModal(true)}>
+                            Output
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -265,6 +287,25 @@ const ProjectsSection: React.FC = () => {
             <img src="/ram1.png" alt="RAM Monitor Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
             <p>This Streamlit app displays your system's RAM usage in real-time, updating every second. It shows total, used, and available RAM, along with a live progress bar.</p>
             <button onClick={() => setShowRamOutputModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showInstaCodeModal && (
+        <div className="modal-overlay" onClick={() => setShowInstaCodeModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Instagram Poster - Streamlit Code</h3>
+            <pre style={{ maxHeight: '400px', overflow: 'auto', background: '#222', color: '#0ff', padding: '1rem', borderRadius: '8px' }}>{instaPosterCode}</pre>
+            <button onClick={() => setShowInstaCodeModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showInstaOutputModal && (
+        <div className="modal-overlay" onClick={() => setShowInstaOutputModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Instagram Poster - Output</h3>
+            <img src="/insta.png" alt="Instagram Poster Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+            <p>This Streamlit app allows you to post to Instagram by entering your credentials, caption, and uploading an image or video. The post preview is shown after submission (mocked).</p>
+            <button onClick={() => setShowInstaOutputModal(false)} className="close-modal-btn">Close</button>
           </div>
         </div>
       )}
