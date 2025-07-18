@@ -29,7 +29,7 @@ const ProjectsSection: React.FC = () => {
         title: 'Website Data Downloader',
         techStack: ['Python', 'Streamlit', 'BeautifulSoup', 'Requests'],
         description: 'Download and extract website HTML and text data using a simple Streamlit app. Enter a URL, fetch the data, and download the results as HTML or plain text.',
-        image: '/Down1.png',
+        image: '/download.jpg', // updated thumbnail
         viewCode: true,
         output: true
       },
@@ -45,7 +45,7 @@ const ProjectsSection: React.FC = () => {
         title: 'Real-Time RAM Monitor',
         techStack: ['Python', 'Streamlit', 'psutil'],
         description: 'Monitor your system RAM usage in real-time with a live updating dashboard. See total, used, and available RAM with a progress bar.',
-        image: '/ram1.png',
+        image: '/ram.jpg', // swapped: now thumbnail
         viewCode: true,
         output: true
       }
@@ -262,7 +262,7 @@ const ProjectsSection: React.FC = () => {
         <div className="modal-overlay" onClick={() => setShowRamOutputModal(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <h3>Real-Time RAM Monitor - Output</h3>
-            <img src="/ram.jpg" alt="RAM Monitor Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+            <img src="/ram1.png" alt="RAM Monitor Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
             <p>This Streamlit app displays your system's RAM usage in real-time, updating every second. It shows total, used, and available RAM, along with a live progress bar.</p>
             <button onClick={() => setShowRamOutputModal(false)} className="close-modal-btn">Close</button>
           </div>
