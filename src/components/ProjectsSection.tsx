@@ -1,16 +1,29 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
+// Define a type for project objects
+interface Project {
+  title: string;
+  techStack: string[];
+  description: string;
+  image: string;
+  viewCode?: boolean;
+  output?: boolean;
+}
+
 const ProjectsSection: React.FC = () => {
   const [showDropdowns, setShowDropdowns] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [showCodeModal, setShowCodeModal] = useState(false);
+  const [showOutputModal, setShowOutputModal] = useState(false);
+  const websiteDownloaderCode = `import streamlit as st\nimport requests\nfrom bs4 import BeautifulSoup\n\nst.set_page_config(page_title=\"Website Data Downloader\", layout=\"centered\")\nst.title(\"🌐 Download Website HTML Data\")\n\nurl = st.text_input(\"Enter website URL (with https://)\", value=\"https://example.com\")\n\nif st.button(\"Fetch Website Data\"):\n    try:\n        response = requests.get(url, timeout=10)\n        response.raise_for_status()\n        \n        html_content = response.text\n        soup = BeautifulSoup(html_content, \"html.parser\")\n        text_only = soup.get_text()\n\n        st.subheader(\"✅ Raw HTML:\")\n        st.code(html_content[:1000] + \"...\", language=\"html\")\n\n        st.subheader(\"🧾 Extracted Text:\")\n        st.text(text_only[:2000] + \"...\" if len(text_only) > 2000 else text_only)\n\n        st.download_button(\"📥 Download Full HTML\", data=html_content, file_name=\"website.html\", mime=\"text/html\")\n        st.download_button(\"📥 Download Extracted Text\", data=text_only, file_name=\"website.txt\", mime=\"text/plain\")\n        \n    except Exception as e:\n        st.error(f\"Error: {e}\")\n`;
 
   const techIcons = [
     '🐍', '⚛️', '🌐', '🎨', '📱', '🐳', '☁️', '⚙️', '📊', '🔧', 
     '💾', '🔒', '🚀', '📡', '🎯', '💡', '🔥', '⚡', '🌟', '🎪'
   ];
 
-  const projects = {
+  const projects: Record<string, Project[]> = {
     Python: [
       {
         title: 'Email Sender Automation',
@@ -35,6 +48,14 @@ const ProjectsSection: React.FC = () => {
         techStack: ['Python', 'Pandas', 'Matplotlib', 'Plotly'],
         description: 'Comprehensive data visualization platform with interactive charts, real-time analytics, and automated reporting for business intelligence.',
         image: 'https://images.pexels.com/photos/5905709/pexels-photo-5905709.jpeg?auto=compress&cs=tinysrgb&w=400'
+      },
+      {
+        title: 'Website Data Downloader',
+        techStack: ['Python', 'Streamlit', 'BeautifulSoup', 'Requests'],
+        description: 'Download and extract website HTML and text data using a simple Streamlit app. Enter a URL, fetch the data, and download the results as HTML or plain text.',
+        image: '/Down1.png',
+        viewCode: true,
+        output: true
       }
     ],
     Fullstack: [
@@ -150,6 +171,16 @@ const ProjectsSection: React.FC = () => {
                           ))}
                         </div>
                         <p className="project-description">{project.description}</p>
+                        {project.viewCode && (
+                          <button className="view-code-btn" onClick={() => setShowCodeModal(true)}>
+                            View Code
+                          </button>
+                        )}
+                        {project.output && (
+                          <button className="output-btn" onClick={() => setShowOutputModal(true)}>
+                            Output
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -160,7 +191,27 @@ const ProjectsSection: React.FC = () => {
         </div>
       )}
 
-      <style jsx>{`
+      {showCodeModal && (
+        <div className="modal-overlay" onClick={() => setShowCodeModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Website Data Downloader - Streamlit Code</h3>
+            <pre style={{ maxHeight: '400px', overflow: 'auto', background: '#222', color: '#0ff', padding: '1rem', borderRadius: '8px' }}>{websiteDownloaderCode}</pre>
+            <button onClick={() => setShowCodeModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showOutputModal && (
+        <div className="modal-overlay" onClick={() => setShowOutputModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Website Data Downloader - Output</h3>
+            <img src="/Down1.png" alt="Website Data Downloader Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+            <p>This Streamlit app allows you to enter any website URL, fetch its HTML content, extract the readable text, and download both as files. The UI is simple and user-friendly, with download buttons for both HTML and text data.</p>
+            <button onClick={() => setShowOutputModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+
+      <style>{`
         .marquee-container {
           width: 100%;
           max-width: 1200px;
@@ -363,6 +414,64 @@ const ProjectsSection: React.FC = () => {
           color: rgba(255, 255, 255, 0.8);
           line-height: 1.6;
           font-family: 'JetBrains Mono', monospace;
+        }
+
+        .view-code-btn, .output-btn {
+          background: #FF00FF;
+          color: #fff;
+          border: none;
+          padding: 0.5rem 1.2rem;
+          border-radius: 6px;
+          font-family: 'JetBrains Mono', monospace;
+          font-weight: 700;
+          font-size: 1rem;
+          margin-right: 0.7rem;
+          margin-top: 0.7rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .view-code-btn:hover, .output-btn:hover {
+          background: #00FFFF;
+          color: #010101;
+        }
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(0,0,0,0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2000;
+        }
+        .modal-content {
+          background: #181818;
+          padding: 2rem;
+          border-radius: 12px;
+          max-width: 600px;
+          width: 90vw;
+          box-shadow: 0 8px 32px rgba(0,255,255,0.2);
+          color: #fff;
+          position: relative;
+        }
+        .close-modal-btn {
+          background: #00FFFF;
+          color: #181818;
+          border: none;
+          padding: 0.5rem 1.2rem;
+          border-radius: 6px;
+          font-family: 'JetBrains Mono', monospace;
+          font-weight: 700;
+          font-size: 1rem;
+          margin-top: 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .close-modal-btn:hover {
+          background: #FF00FF;
+          color: #fff;
         }
 
         @media (max-width: 768px) {
