@@ -26,34 +26,18 @@ const ProjectsSection: React.FC = () => {
   const projects: Record<string, Project[]> = {
     Python: [
       {
-        title: 'Email Sender Automation',
-        techStack: ['Python', 'SMTP', 'Pandas', 'Streamlit'],
-        description: 'Automated email sending system with bulk email capabilities, template customization, and analytics dashboard for efficient communication management.',
-        image: 'https://images.pexels.com/photos/4439901/pexels-photo-4439901.jpeg?auto=compress&cs=tinysrgb&w=400'
-      },
-      {
-        title: 'WhatsApp Sender Bot',
-        techStack: ['Python', 'Selenium', 'PyAutoGUI', 'Schedule'],
-        description: 'Automated WhatsApp messaging bot for bulk messaging, scheduled sends, and contact management with intelligent message queuing.',
-        image: 'https://images.pexels.com/photos/147413/twitter-facebook-together-exchange-of-information-147413.jpeg?auto=compress&cs=tinysrgb&w=400'
-      },
-      {
-        title: 'AI Chat Assistant',
-        techStack: ['Python', 'OpenAI API', 'Flask', 'WebSocket'],
-        description: 'Intelligent chatbot with natural language processing capabilities, context awareness, and multi-platform integration for enhanced user experience.',
-        image: 'https://images.pexels.com/photos/8386434/pexels-photo-8386434.jpeg?auto=compress&cs=tinysrgb&w=400'
-      },
-      {
-        title: 'Data Analysis Dashboard',
-        techStack: ['Python', 'Pandas', 'Matplotlib', 'Plotly'],
-        description: 'Comprehensive data visualization platform with interactive charts, real-time analytics, and automated reporting for business intelligence.',
-        image: 'https://images.pexels.com/photos/5905709/pexels-photo-5905709.jpeg?auto=compress&cs=tinysrgb&w=400'
-      },
-      {
         title: 'Website Data Downloader',
         techStack: ['Python', 'Streamlit', 'BeautifulSoup', 'Requests'],
         description: 'Download and extract website HTML and text data using a simple Streamlit app. Enter a URL, fetch the data, and download the results as HTML or plain text.',
         image: '/Down1.png',
+        viewCode: true,
+        output: true
+      },
+      {
+        title: 'Medicine Info Chatbot (Gemini)',
+        techStack: ['Python', 'Streamlit', 'BeautifulSoup', 'Requests', 'OpenAI', 'Gemini'],
+        description: 'Chatbot that answers questions about medicines using Gemini and live data from 1mg.com. Enter a medicine name and get AI-powered information.',
+        image: '/Medi1.png',
         viewCode: true,
         output: true
       }
@@ -121,6 +105,10 @@ const ProjectsSection: React.FC = () => {
     setActiveDropdown(activeDropdown === category ? null : category);
   };
 
+  const [showGeminiCodeModal, setShowGeminiCodeModal] = useState(false);
+  const [showGeminiOutputModal, setShowGeminiOutputModal] = useState(false);
+  const geminiChatbotCode = `import streamlit as st\n\nimport requests\n\nfrom bs4 import BeautifulSoup\n\nfrom openai import OpenAI\n\n# API key for Gemini (you should consider using st.secrets in real apps for security)\ngemini_api_key = \"AIzaSyCqhhxWutn3J8sjtZHYf3Ayky0DePdtTP0\"\n\n# Get content from 1mg\nresponse = requests.get(\"https://www.1mg.com\")\nhtmlaicontent = response.text\nmysoup = BeautifulSoup(markup=htmlaicontent, features=\"html.parser\")\n\n# Set up the Gemini model through OpenAI interface\ngemini_model = OpenAI(\n    base_url=\"https://generativelanguage.googleapis.com/v1beta/openai/\",\n    api_key=gemini_api_key\n)\n\n# Define the chatbot function\ndef chatbot(userprompt):\n    my_msg = [\n        {\"role\": \"system\", \"content\": f\"you are AI assistent, your duty is to give the information about medicines available or not and thier salts ,take your content from: {htmlaicontent}\"},\n        {\"role\": \"user\", \"content\": userprompt}\n    ]\n    response = gemini_model.chat.completions.create(model=\"gemini-2.5-flash\", messages=my_msg)\n    return response.choices[0].message.content\n\n# Streamlit UI\nst.title(\"Medicine Info Chatbot (Gemini)\")\n\nuser_input = st.text_input(\"Ask about any medicine:\", placeholder=\"e.g., tell me about paracetamol\")\n\nif user_input:\n    with st.spinner(\"Thinking...\"):\n        answer = chatbot(user_input)\n    st.markdown(\"### Answer:\")\n    st.write(answer)\n`;
+
   return (
     <section id="projects" className="section">
       <h2 className="section-heading">PROJECTS</h2>
@@ -171,13 +159,23 @@ const ProjectsSection: React.FC = () => {
                           ))}
                         </div>
                         <p className="project-description">{project.description}</p>
-                        {project.viewCode && (
+                        {project.title === 'Website Data Downloader' && project.viewCode && (
                           <button className="view-code-btn" onClick={() => setShowCodeModal(true)}>
                             View Code
                           </button>
                         )}
-                        {project.output && (
+                        {project.title === 'Website Data Downloader' && project.output && (
                           <button className="output-btn" onClick={() => setShowOutputModal(true)}>
+                            Output
+                          </button>
+                        )}
+                        {project.title === 'Medicine Info Chatbot (Gemini)' && project.viewCode && (
+                          <button className="view-code-btn" onClick={() => setShowGeminiCodeModal(true)}>
+                            View Code
+                          </button>
+                        )}
+                        {project.title === 'Medicine Info Chatbot (Gemini)' && project.output && (
+                          <button className="output-btn" onClick={() => setShowGeminiOutputModal(true)}>
                             Output
                           </button>
                         )}
@@ -207,6 +205,25 @@ const ProjectsSection: React.FC = () => {
             <img src="/Down1.png" alt="Website Data Downloader Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
             <p>This Streamlit app allows you to enter any website URL, fetch its HTML content, extract the readable text, and download both as files. The UI is simple and user-friendly, with download buttons for both HTML and text data.</p>
             <button onClick={() => setShowOutputModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showGeminiCodeModal && (
+        <div className="modal-overlay" onClick={() => setShowGeminiCodeModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Medicine Info Chatbot (Gemini) - Streamlit Code</h3>
+            <pre style={{ maxHeight: '400px', overflow: 'auto', background: '#222', color: '#0ff', padding: '1rem', borderRadius: '8px' }}>{geminiChatbotCode}</pre>
+            <button onClick={() => setShowGeminiCodeModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showGeminiOutputModal && (
+        <div className="modal-overlay" onClick={() => setShowGeminiOutputModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Medicine Info Chatbot (Gemini) - Output</h3>
+            <img src="/Medi.png" alt="Medicine Info Chatbot Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+            <p>This Streamlit app allows you to ask about any medicine. It uses Gemini AI and live data from 1mg.com to answer your queries about medicine availability and their salts.</p>
+            <button onClick={() => setShowGeminiOutputModal(false)} className="close-modal-btn">Close</button>
           </div>
         </div>
       )}
