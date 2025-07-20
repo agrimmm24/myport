@@ -16,6 +16,21 @@ const ProjectsSection: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [showCodeModal, setShowCodeModal] = useState(false);
   const [showOutputModal, setShowOutputModal] = useState(false);
+  const [showGeminiCodeModal, setShowGeminiCodeModal] = useState(false);
+  const [showGeminiOutputModal, setShowGeminiOutputModal] = useState(false);
+  const [showRamCodeModal, setShowRamCodeModal] = useState(false);
+  const [showRamOutputModal, setShowRamOutputModal] = useState(false);
+  const [showInstaCodeModal, setShowInstaCodeModal] = useState(false);
+  const [showInstaOutputModal, setShowInstaOutputModal] = useState(false);
+  const [showMenuCodeModal, setShowMenuCodeModal] = useState(false);
+  const [showMenuOutputModal, setShowMenuOutputModal] = useState(false);
+  const [showGeminiChatCodeModal, setShowGeminiChatCodeModal] = useState(false);
+  const [showGeminiChatOutputModal, setShowGeminiChatOutputModal] = useState(false);
+  const [showEmailCodeModal, setShowEmailCodeModal] = useState(false);
+  const [showEmailOutputModal, setShowEmailOutputModal] = useState(false);
+  const [showSmsCodeModal, setShowSmsCodeModal] = useState(false);
+  const [showSmsOutputModal, setShowSmsOutputModal] = useState(false);
+
   const websiteDownloaderCode = `import streamlit as st\nimport requests\nfrom bs4 import BeautifulSoup\n\nst.set_page_config(page_title=\"Website Data Downloader\", layout=\"centered\")\nst.title(\"🌐 Download Website HTML Data\")\n\nurl = st.text_input(\"Enter website URL (with https://)\", value=\"https://example.com\")\n\nif st.button(\"Fetch Website Data\"):\n    try:\n        response = requests.get(url, timeout=10)\n        response.raise_for_status()\n        \n        html_content = response.text\n        soup = BeautifulSoup(html_content, \"html.parser\")\n        text_only = soup.get_text()\n\n        st.subheader(\"✅ Raw HTML:\")\n        st.code(html_content[:1000] + \"...\", language=\"html\")\n\n        st.subheader(\"🧾 Extracted Text:\")\n        st.text(text_only[:2000] + \"...\" if len(text_only) > 2000 else text_only)\n\n        st.download_button(\"📥 Download Full HTML\", data=html_content, file_name=\"website.html\", mime=\"text/html\")\n        st.download_button(\"📥 Download Extracted Text\", data=text_only, file_name=\"website.txt\", mime=\"text/plain\")\n        \n    except Exception as e:\n        st.error(f\"Error: {e}\")\n`;
 
   const techIcons = [
@@ -29,7 +44,7 @@ const ProjectsSection: React.FC = () => {
         title: 'Website Data Downloader',
         techStack: ['Python', 'Streamlit', 'BeautifulSoup', 'Requests'],
         description: 'Download and extract website HTML and text data using a simple Streamlit app. Enter a URL, fetch the data, and download the results as HTML or plain text.',
-        image: '/download.jpg', // updated thumbnail
+        image: '/download.jpg',
         viewCode: true,
         output: true
       },
@@ -45,7 +60,7 @@ const ProjectsSection: React.FC = () => {
         title: 'Real-Time RAM Monitor',
         techStack: ['Python', 'Streamlit', 'psutil'],
         description: 'Monitor your system RAM usage in real-time with a live updating dashboard. See total, used, and available RAM with a progress bar.',
-        image: '/ram.jpg', // swapped: now thumbnail
+        image: '/ram.jpg',
         viewCode: true,
         output: true
       },
@@ -62,6 +77,30 @@ const ProjectsSection: React.FC = () => {
         techStack: ['Python', 'Streamlit', 'OpenAI', 'Docker', 'Linux', 'PIL'],
         description: 'A menu-based Streamlit app with Linux, Docker, GenAI, ML, Email, WhatsApp, Calling, Messaging, Instagram, and LinkedIn features. Includes code execution, AI chat, and more.',
         image: '/menu1.png',
+        viewCode: true,
+        output: true
+      },
+      {
+        title: 'Gemini Chat',
+        techStack: ['Python', 'Streamlit', 'Google Gemini'],
+        description: 'A Streamlit chatbot using Gemini LLM for mental health Q&A. Secure API key, few-shot learning, and interactive chat.',
+        image: '/llm1.jpeg',
+        viewCode: true,
+        output: true
+      },
+      {
+        title: 'Send Email',
+        techStack: ['Python', 'Streamlit', 'SMTP'],
+        description: 'A Streamlit app to send styled emails with attachments. Includes custom background, file upload, and secure sending.',
+        image: '/email1.jpg',
+        viewCode: true,
+        output: true
+      },
+      {
+        title: 'SMS Sender via Twilio',
+        techStack: ['Python', 'Streamlit', 'Twilio'],
+        description: 'Send SMS messages using Twilio API from a Streamlit app. Enter recipient, message, and send instantly.',
+        image: '/msg1.jpeg',
         viewCode: true,
         output: true
       }
@@ -129,21 +168,19 @@ const ProjectsSection: React.FC = () => {
     setActiveDropdown(activeDropdown === category ? null : category);
   };
 
-  const [showGeminiCodeModal, setShowGeminiCodeModal] = useState(false);
-  const [showGeminiOutputModal, setShowGeminiOutputModal] = useState(false);
   const geminiChatbotCode = `import streamlit as st\n\nimport requests\n\nfrom bs4 import BeautifulSoup\n\nfrom openai import OpenAI\n\n# API key for Gemini (you should consider using st.secrets in real apps for security)\ngemini_api_key = \"AIzaSyCqhhxWutn3J8sjtZHYf3Ayky0DePdtTP0\"\n\n# Get content from 1mg\nresponse = requests.get(\"https://www.1mg.com\")\nhtmlaicontent = response.text\nmysoup = BeautifulSoup(markup=htmlaicontent, features=\"html.parser\")\n\n# Set up the Gemini model through OpenAI interface\ngemini_model = OpenAI(\n    base_url=\"https://generativelanguage.googleapis.com/v1beta/openai/\",\n    api_key=gemini_api_key\n)\n\n# Define the chatbot function\ndef chatbot(userprompt):\n    my_msg = [\n        {\"role\": \"system\", \"content\": f\"you are AI assistent, your duty is to give the information about medicines available or not and thier salts ,take your content from: {htmlaicontent}\"},\n        {\"role\": \"user\", \"content\": userprompt}\n    ]\n    response = gemini_model.chat.completions.create(model=\"gemini-2.5-flash\", messages=my_msg)\n    return response.choices[0].message.content\n\n# Streamlit UI\nst.title(\"Medicine Info Chatbot (Gemini)\")\n\nuser_input = st.text_input(\"Ask about any medicine:\", placeholder=\"e.g., tell me about paracetamol\")\n\nif user_input:\n    with st.spinner(\"Thinking...\"):\n        answer = chatbot(user_input)\n    st.markdown(\"### Answer:\")\n    st.write(answer)\n`;
 
-  const [showRamCodeModal, setShowRamCodeModal] = useState(false);
-  const [showRamOutputModal, setShowRamOutputModal] = useState(false);
   const ramMonitorCode = `import streamlit as st\nimport psutil\nimport time\n\nst.set_page_config(page_title=\"RAM Monitor\", layout=\"centered\")\n\nst.title(\"💾 Real-Time RAM Monitor\")\n\nplaceholder = st.empty()\n\nwhile True:\n    mem = psutil.virtual_memory()\n    \n    total = mem.total / (1024 ** 3)\n    available = mem.available / (1024 ** 3)\n    used = mem.used / (1024 ** 3)\n    percent = mem.percent\n\n    with placeholder.container():\n        st.metric(label=\"Total RAM\", value=f\"{total:.2f} GB\")\n        st.metric(label=\"Used RAM\", value=f\"{used:.2f} GB\")\n        st.metric(label=\"Available RAM\", value=f\"{available:.2f} GB\")\n        st.progress(percent / 100.0, text=f\"{percent}% Used\")\n\n    time.sleep(1)\n`;
 
-  const [showInstaCodeModal, setShowInstaCodeModal] = useState(false);
-  const [showInstaOutputModal, setShowInstaOutputModal] = useState(false);
   const instaPosterCode = `import streamlit as st\n\nst.set_page_config(page_title=\"Instagram Poster\", page_icon=\"\ud83d\udcf8\", layout=\"centered\")\n\nst.title(\"\ud83d\udcf8 Instagram Poster\")\n\n# Input fields\nusername = st.text_input(\"Instagram Username\")\npassword = st.text_input(\"Password\", type=\"password\")\ncaption = st.text_area(\"Post Caption\")\nmedia = st.file_uploader(\"Upload Image/Video\", type=[\"jpg\", \"jpeg\", \"png\", \"mp4\"])\n\n# Submit Button\nif st.button(\"Submit Post\"):\n    if not username or not password or not caption:\n        st.warning(\"Please fill in all fields (username, password, caption).\")\n    else:\n        st.success(\"\u2705 Your post has been submitted to Instagram (Mocked).\")\n        st.write(\"### \ud83d\udcc4 Post Preview\")\n        st.write(f\"**Username:** {username}\")\n        st.write(f\"**Caption:** {caption}\")\n        if media:\n            st.write(f\"**Uploaded File:** {media.name}\")\n            if media.type.startswith(\"image/\"):\n                st.image(media, caption=\"Uploaded Image\", use_column_width=True)\n            \n            elif media.type == \"video/mp4\":\n                st.video(media)\n            else:\n                st.warning(\"Unsupported file type for preview.\")\n`;
 
-  const [showMenuCodeModal, setShowMenuCodeModal] = useState(false);
-  const [showMenuOutputModal, setShowMenuOutputModal] = useState(false);
   const menuAppCode = `import streamlit as st\nfrom PIL import Image\nimport subprocess\nimport os\nimport openai\nimport platform\n\n# ========== API KEY ==========\nopenai.api_key = \"AIzaSyBcaSAM_AsYpUqsdjpZdZt6w61v2ZPS0Ag\"  # ✅ Put your actual API key here\n\n# ========== PAGE CONFIG ==========\nst.set_page_config(page_title=\"All-in-One Menu App\", layout=\"wide\", page_icon=\"🔹\")\n\n# ========== BACKGROUND FUNCTION ==========\ndef set_bg(image_url=None):\n    if image_url:\n        st.markdown(f\"\"\"\n            <style>\n            .stApp {{\n                background-image: url('{image_url}');\n                background-size: cover;\n                background-repeat: no-repeat;\n                background-attachment: fixed;\n            }}\n            </style>\n            \"\"\", unsafe_allow_html=True)\n\n# ========== PAGE DEFINITIONS ==========\n\ndef home():\n    set_bg(\"https://images.unsplash.com/photo-1518976024611-488aa8ef3492\")\n    st.title(\"📅 All-in-One Menu Based App\")\n    st.markdown(\"### Choose a functionality .\")\n\ndef linux_commands():\n    set_bg()\n    st.title(\"💻 Linux Command Executor\")\n    \n    st.markdown(f\"🖥️ Detected OS: `{platform.system()}`\")\n    st.markdown(\"\"\"\n    **ℹ️ Note:** This command box accepts basic Linux commands like `ls`, `pwd`, `cal`, etc. On Windows, some of them will be auto-mapped to Windows equivalents.\n    \"\"\")\n    \n    command = st.text_input(\"🔧 Enter a Linux command\")\n\n    if st.button(\"▶️ Run Command\"):\n        if command:\n            # Windows command mapping\n            if platform.system() == \"Windows\":\n                if command.strip() == \"ls\":\n                    command = \"dir\"\n                elif command.strip() == \"pwd\":\n                    command = \"cd\"\n                elif command.strip() == \"clear\":\n                    command = \"cls\"\n                elif command.strip() == \"cal\":\n                    st.error(\"❌ The `cal` command is not available on Windows.\")\n                    return\n\n            try:\n                result = os.popen(command).read()\n                if result.strip():\n                    st.code(result)\n                else:\n                    st.warning(\"✅ Command executed, but no output returned.\")\n            except Exception as e:\n                st.error(f\"❌ Error: {str(e)}\")\n\ndef docker_commands():\n    set_bg(\"https://miro.medium.com/v2/resize:fit:1358/1*FIeWJym9cXM0zTFs5l6y8g.png\")\n    st.title(\"🐳 Docker Command Executor\")\n    \n    st.markdown(\"Type any Docker command like `docker ps`, `docker images`, `docker run hello-world`, etc.\")\n    docker_cmd = st.text_input(\"🔧 Enter Docker Command\")\n\n    if st.button(\"▶️ Execute Docker Command\"):\n        if docker_cmd:\n            try:\n                # Run the command as a subprocess\n                result = subprocess.run(docker_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)\n                \n                if result.stdout:\n                    st.code(result.stdout, language=\"bash\")\n                if result.stderr:\n                    st.error(result.stderr)\n                if not result.stdout and not result.stderr:\n                    st.warning(\"No output returned.\")\n            except Exception as e:\n                st.error(f\"❌ Error executing command: {e}\")\n\nimport openai\n\nclient = openai.OpenAI(api_key=\"AIzaSyBcaSAM_AsYpUqsdjpZdZt6w61v2ZPS0Ag\")  # Replace with your key\n\ndef genai_model():\n    set_bg(\"https://images.unsplash.com/photo-1618411445308-e146f2ebd32e\")\n    st.title(\"🧠 GenAI Prompt Engine\")\n    st.subheader(\"Ask anything. Get instant AI answers.\")\n\n    model_name = st.text_input(\"🧠 Model\", value=\"gemini-2.5-flash\")\n    prompt = st.text_area(\"💬 Enter your prompt\")\n\n    if st.button(\"Generate Response\"):\n        if not prompt:\n            st.warning(\"Please enter a prompt.\")\n        else:\n            with st.spinner(\"Generating response...\"):\n                try:\n                    response = client.chat.completions.create(\n                        model=model_name,\n                        messages=[\n                            {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n                            {\"role\": \"user\", \"content\": prompt}\n                        ],\n                        temperature=0.7\n                    )\n                    answer = response.choices[0].message.content\n                    st.success(\"✅ Response Generated\")\n                    st.markdown(f\"**🔎 Prompt:** {prompt}\")\n                    st.markdown(\"**📝 Response:**\")\n                    st.code(answer)\n                except Exception as e:\n                    st.error(f\"❌ Error: {str(e)}\")\n\ndef ml_prediction():\n    set_bg(\"https://images.unsplash.com/photo-1581091870634-7f93c1aee9c4\")\n    st.title(\"🧬 ML Prediction Model\")\n    val = st.slider(\"Input Feature Value\", 0.0, 10.0, 5.0)\n    prediction = 2 * val + 1\n    st.success(f\"Predicted Output: {prediction}\")\n\ndef email_sender():\n    set_bg(\"https://images.unsplash.com/photo-1591012911207-3c3b29b3a3e1\")\n    st.title(\"📧 Email Sender\")\n    sender = st.text_input(\"Sender Email\")\n    receiver = st.text_input(\"Receiver Email\")\n    subject = st.text_input(\"Subject\")\n    body = st.text_area(\"Body\")\n    if st.button(\"Send Email\"):\n        st.success(\"Email sent successfully (mocked)\")\n\ndef whatsapp_sender():\n    set_bg(\"https://img.freepik.com/free-photo/whatsapp-3d-icon-podium-3d-rendering_494347-1005.jpg\")\n    st.title(\"📱 WhatsApp Message Sender\")\n    number = st.text_input(\"Phone Number\")\n    hour = st.number_input(\"Send Hour (24H)\", min_value=0, max_value=23, value=12)\n    minute = st.number_input(\"Send Minute\", min_value=0, max_value=59, value=0)\n    msg = st.text_area(\"Message\")\n    if st.button(\"Send Message\"):\n        st.success(f\"Message to {number} scheduled at {hour:02d}:{minute:02d} (mocked)\")\n\ndef calling_model():\n    set_bg(\"https://cdn.pixabay.com/photo/2020/04/09/13/24/telephone-5010975_1280.jpg\")\n    st.title(\"☎️ Calling Model\")\n    phone = st.text_input(\"Enter phone number to call\")\n    if st.button(\"Make Call\"):\n        st.success(f\"Calling {phone} (mocked)\")\n\ndef messaging_model():\n    set_bg()\n    st.title(\"📲 Messaging Model\")\n    number = st.text_input(\"Enter Number\")\n    msg = st.text_area(\"Enter Message\")\n    if st.button(\"Send SMS\"):\n        st.success(\"Message sent successfully (mocked)\")\n\ndef insta_post():\n    set_bg(\"https://images.unsplash.com/photo-1634942537033-1d39dd92db1c\")\n    st.title(\"📸 Instagram Poster\")\n    username = st.text_input(\"Instagram Username\")\n    password = st.text_input(\"Instagram Password\", type=\"password\")\n    photo = st.file_uploader(\"Upload Photo\")\n    caption = st.text_area(\"Enter Caption\")\n    if st.button(\"Post on Instagram\"):\n        st.success(f\"Posted to Instagram as {username} (mocked)\")\n\ndef linkedin_post():\n    set_bg()\n    st.title(\"📅 LinkedIn Poster\")\n    username = st.text_input(\"LinkedIn Username\")\n    content = st.text_area(\"Enter Content to Post\")\n    if st.button(\"Post on LinkedIn\"):\n        st.success(f\"Posted to LinkedIn as {username} (mocked)\")\n\n# ========== SIDEBAR MENU ==========\nst.sidebar.image(\"https://static.streamlit.io/examples/cat.jpg\", width=180)\nst.sidebar.markdown(\"## 📋 Navigation\")\nselected = st.sidebar.radio(\n    \"Go to\",\n    [\n        \"Home\", \"Linux Commands\", \"Docker Commands\", \"GenAI Model\",\n        \"ML Prediction\", \"Email Sender\", \"WhatsApp Sender\", \"Calling Model\",\n        \"Messaging Model\", \"Instagram Post\", \"LinkedIn Post\"\n    ]\n)\n\n# ========== ROUTING ==========\npages = {\n    \"Home\": home,\n    \"Linux Commands\": linux_commands,\n    \"Docker Commands\": docker_commands,\n    \"GenAI Model\": genai_model,\n    \"ML Prediction\": ml_prediction,\n    \"Email Sender\": email_sender,\n    \"WhatsApp Sender\": whatsapp_sender,\n    \"Calling Model\": calling_model,\n    \"Messaging Model\": messaging_model,\n    \"Instagram Post\": insta_post,\n    \"LinkedIn Post\": linkedin_post\n}\n\npages[selected]()  # Run selected page\n`;
+
+  const geminiChatCode = `import streamlit as st\nimport google.generativeai as genai\n\nst.set_page_config(page_title=\"Gemini Chat\", layout=\"centered\")\nst.title(\"🤖 Mental Reliever\")\n\n# Replace with your own key, stored securely in production\napi_key = \"AIzaSyBcaSAM_AsYpUqsdjpZdZt6w61v2ZPS0Ag\"\n\nif api_key:\n    genai.configure(api_key=api_key)\n    model = genai.GenerativeModel(\"gemini-2.5-flash\")\n\n    # Corrected few-shot examples\n    few_shot_history = [\n        {\"role\": \"user\", \"parts\": [\"Can you help me understand anxiety?\"]},\n        {\"role\": \"model\", \"parts\": [\"Sure, I’m a psychologist with 20 years of experience. Anxiety is...\"]},\n    ]\n\n    chat = model.start_chat(history=few_shot_history)\n\n    user_query = st.text_input(\"Ask a question:\", placeholder=\"e.g. How to deal with stress?\")\n\n    if st.button(\"Send\"):\n        if user_query.strip() == \"\":\n            st.warning(\"Please enter a question.\")\n        else:\n            with st.spinner(\"Thinking...\"):\n                response = chat.send_message(user_query)\n                st.success(\"Response:\")\n                st.write(response.text)\nelse:\n    st.warning(\"Please enter your Gemini API Key to begin.\")\n`;
+
+  const emailSenderCode = `import streamlit as st\nimport smtplib\nfrom email.mime.multipart import MIMEMultipart\nfrom email.mime.text import MIMEText\nfrom email.mime.base import MIMEBase\nfrom email import encoders\n\n# ------------------ BACKGROUND CSS ------------------ #\ndef set_bg_image():\n    st.markdown(\"\"\"\n        <style>\n        .stApp {\n            background-image: url(\"https://static.vecteezy.com/system/resources/previews/000/543/942/non_2x/futuristic-blue-express-envelope-and-parcel-abstract-technology-background-business-quantum-internet-network-communication-and-high-speed-parcel-delivery-and-email-text-sending-message-service-vector.jpg\");\n            background-size: cover;\n            background-position: center;\n            background-repeat: no-repeat;\n            background-attachment: fixed;\n        }\n\n        .block-container {\n            background: rgba(255, 255, 255, 0.10);\n            backdrop-filter: blur(12px);\n            -webkit-backdrop-filter: blur(12px);\n            border-radius: 16px;\n            padding: 2rem;\n            margin-top: 50px;\n            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);\n            color: #ffffff;\n        }\n\n        input, textarea, .stTextInput > div > div, .stTextArea > div > div,\n        .stFileUploader > div, .stButton > button {\n            background-color: rgba(0, 0, 0, 0.5) !important;\n            color: #fff !important;\n            border-radius: 8px;\n        }\n\n        .stButton > button:hover {\n            background-color: rgba(0, 0, 0, 0.7) !important;\n        }\n\n        </style>\n    \"\"\", unsafe_allow_html=True)\n\n# Set background\nset_bg_image()\n\n# ------------------ Email UI ------------------ #\nwith st.container():\n    st.markdown('<div class="block-container">', unsafe_allow_html=True)\n\n    st.title("📨 Send Email")\n\n    receiver_email = st.text_input("📬 Receiver's Email")\n    subject = st.text_input("✉️ Email Subject")\n    body = st.text_area("📝 Email Body")\n    uploaded_files = st.file_uploader("📎 Upload PDF or JPG files", type=["pdf", "jpg", "jpeg"], accept_multiple_files=True)\n\n    send_button = st.button("🚀 Send Email")\n\n    sender_email = "sri.agrimsri@gmail.com"\n    sender_password = "tqgovynagziswluk"  # Use App Password\n\n    if send_button:\n        if not receiver_email or not subject or not body:\n            st.error("❗ Please fill in all required fields.")\n        else:\n            try:\n                msg = MIMEMultipart()\n                msg['From'] = sender_email\n                msg['To'] = receiver_email\n                msg['Subject'] = subject\n\n                msg.attach(MIMEText(body, 'plain'))\n\n                for file in uploaded_files:\n                    part = MIMEBase('application', 'octet-stream')\n                    part.set_payload(file.read())\n                    encoders.encode_base64(part)\n                    part.add_header('Content-Disposition', f'attachment; filename="{file.name}"')\n                    msg.attach(part)\n\n                server = smtplib.SMTP('smtp.gmail.com', 587)\n                server.starttls()\n                server.login(sender_email, sender_password)\n                server.send_message(msg)\n                server.quit()\n\n                st.success(f"✅ Email sent to {receiver_email} with {len(uploaded_files)} file(s) attached.")\n            except Exception as e:\n                st.error(f"❌ Failed to send email. Error: {str(e)}")\n\n    st.markdown('</div>', unsafe_allow_html=True)\n# ------------------ END OF EMAIL UI ------------------ \n`;
+
+  const smsSenderCode = `import streamlit as st\nfrom twilio.rest import Client\n\n# Twilio credentials (DO NOT share these publicly)\nACCOUNT_SID = 'Account_sid'  # Replace with your Twilio Account SID\nAUTH_TOKEN = 'twilio_auth_token'                 # Replace with your Twilio Auth Token\nTWILIO_PHONE_NUMBER = 'twilio_number'                # Replace with your Twilio number\n\n# Streamlit UI setup\nst.set_page_config(page_title=\"📱 SMS Sender\", layout=\"centered\")\nst.title(\"📱 SMS Sender via Twilio\")\n\n# Input fields\nto_number = st.text_input(\"Enter recipient phone number (with country code)\", placeholder=\"+91XXXXXXXXXX\")\nmessage = st.text_area(\"Enter your message\")\n\n# Submit button\nif st.button(\"Send SMS\"):\n    if not to_number or not message:\n        st.warning(\"Please provide both phone number and message.\")\n    else:\n        try:\n            # Initialize Twilio client\n            client = Client(ACCOUNT_SID, AUTH_TOKEN)\n\n            # Send the SMS\n            message = client.messages.create(\n                body=message,\n                from_=TWILIO_PHONE_NUMBER,\n                to=to_number\n            )\n\n            st.success(f\"✅ Message sent! SID: {message.sid}\")\n        except Exception as e:\n            st.error(f\"❌ Failed to send message: {e}\")\n`;
 
   return (
     <section id="projects" className="section">
@@ -242,6 +279,36 @@ const ProjectsSection: React.FC = () => {
                         )}
                         {project.title === 'All-in-One Menu App' && project.output && (
                           <button className="output-btn" onClick={() => setShowMenuOutputModal(true)}>
+                            Output
+                          </button>
+                        )}
+                        {project.title === 'Gemini Chat' && project.viewCode && (
+                          <button className="view-code-btn" onClick={() => setShowGeminiChatCodeModal(true)}>
+                            View Code
+                          </button>
+                        )}
+                        {project.title === 'Gemini Chat' && project.output && (
+                          <button className="output-btn" onClick={() => setShowGeminiChatOutputModal(true)}>
+                            Output
+                          </button>
+                        )}
+                        {project.title === 'Send Email' && project.viewCode && (
+                          <button className="view-code-btn" onClick={() => setShowEmailCodeModal(true)}>
+                            View Code
+                          </button>
+                        )}
+                        {project.title === 'Send Email' && project.output && (
+                          <button className="output-btn" onClick={() => setShowEmailOutputModal(true)}>
+                            Output
+                          </button>
+                        )}
+                        {project.title === 'SMS Sender via Twilio' && project.viewCode && (
+                          <button className="view-code-btn" onClick={() => setShowSmsCodeModal(true)}>
+                            View Code
+                          </button>
+                        )}
+                        {project.title === 'SMS Sender via Twilio' && project.output && (
+                          <button className="output-btn" onClick={() => setShowSmsOutputModal(true)}>
                             Output
                           </button>
                         )}
@@ -347,6 +414,63 @@ const ProjectsSection: React.FC = () => {
             <img src="/menu.png" alt="All-in-One Menu App Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
             <p>This Streamlit app provides a menu-based interface for Linux, Docker, GenAI, ML, Email, WhatsApp, Calling, Messaging, Instagram, and LinkedIn features. Each feature is accessible from the sidebar menu.</p>
             <button onClick={() => setShowMenuOutputModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showGeminiChatCodeModal && (
+        <div className="modal-overlay" onClick={() => setShowGeminiChatCodeModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Gemini Chat - Streamlit Code</h3>
+            <pre style={{ maxHeight: '400px', overflow: 'auto', background: '#222', color: '#0ff', padding: '1rem', borderRadius: '8px' }}>{geminiChatCode}</pre>
+            <button onClick={() => setShowGeminiChatCodeModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showGeminiChatOutputModal && (
+        <div className="modal-overlay" onClick={() => setShowGeminiChatOutputModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Gemini Chat - Output</h3>
+            <img src="/llm.png" alt="Gemini Chat Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+            <p>This Streamlit app lets you chat with a Gemini LLM for mental health support. Enter your question and get an AI-powered response.</p>
+            <button onClick={() => setShowGeminiChatOutputModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showEmailCodeModal && (
+        <div className="modal-overlay" onClick={() => setShowEmailCodeModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Send Email - Streamlit Code</h3>
+            <pre style={{ maxHeight: '400px', overflow: 'auto', background: '#222', color: '#0ff', padding: '1rem', borderRadius: '8px' }}>{emailSenderCode}</pre>
+            <button onClick={() => setShowEmailCodeModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showEmailOutputModal && (
+        <div className="modal-overlay" onClick={() => setShowEmailOutputModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Send Email - Output</h3>
+            <img src="/email.png" alt="Send Email Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+            <p>This Streamlit app allows you to send emails with attachments and a beautiful UI. Fill in the details, upload files, and send your message securely.</p>
+            <button onClick={() => setShowEmailOutputModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showSmsCodeModal && (
+        <div className="modal-overlay" onClick={() => setShowSmsCodeModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>SMS Sender via Twilio - Streamlit Code</h3>
+            <pre style={{ maxHeight: '400px', overflow: 'auto', background: '#222', color: '#0ff', padding: '1rem', borderRadius: '8px' }}>{smsSenderCode}</pre>
+            <button onClick={() => setShowSmsCodeModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showSmsOutputModal && (
+        <div className="modal-overlay" onClick={() => setShowSmsOutputModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>SMS Sender via Twilio - Output</h3>
+            <img src="/msg.png" alt="SMS Sender Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+            <p>This Streamlit app lets you send SMS messages using Twilio. Enter the recipient's number and your message, then send instantly.</p>
+            <button onClick={() => setShowSmsOutputModal(false)} className="close-modal-btn">Close</button>
           </div>
         </div>
       )}
