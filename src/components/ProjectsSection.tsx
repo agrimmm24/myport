@@ -56,6 +56,14 @@ const ProjectsSection: React.FC = () => {
         image: '/insta1.jpg',
         viewCode: true,
         output: true
+      },
+      {
+        title: 'All-in-One Menu App',
+        techStack: ['Python', 'Streamlit', 'OpenAI', 'Docker', 'Linux', 'PIL'],
+        description: 'A menu-based Streamlit app with Linux, Docker, GenAI, ML, Email, WhatsApp, Calling, Messaging, Instagram, and LinkedIn features. Includes code execution, AI chat, and more.',
+        image: '/menu1.png',
+        viewCode: true,
+        output: true
       }
     ],
     Fullstack: [
@@ -132,6 +140,10 @@ const ProjectsSection: React.FC = () => {
   const [showInstaCodeModal, setShowInstaCodeModal] = useState(false);
   const [showInstaOutputModal, setShowInstaOutputModal] = useState(false);
   const instaPosterCode = `import streamlit as st\n\nst.set_page_config(page_title=\"Instagram Poster\", page_icon=\"\ud83d\udcf8\", layout=\"centered\")\n\nst.title(\"\ud83d\udcf8 Instagram Poster\")\n\n# Input fields\nusername = st.text_input(\"Instagram Username\")\npassword = st.text_input(\"Password\", type=\"password\")\ncaption = st.text_area(\"Post Caption\")\nmedia = st.file_uploader(\"Upload Image/Video\", type=[\"jpg\", \"jpeg\", \"png\", \"mp4\"])\n\n# Submit Button\nif st.button(\"Submit Post\"):\n    if not username or not password or not caption:\n        st.warning(\"Please fill in all fields (username, password, caption).\")\n    else:\n        st.success(\"\u2705 Your post has been submitted to Instagram (Mocked).\")\n        st.write(\"### \ud83d\udcc4 Post Preview\")\n        st.write(f\"**Username:** {username}\")\n        st.write(f\"**Caption:** {caption}\")\n        if media:\n            st.write(f\"**Uploaded File:** {media.name}\")\n            if media.type.startswith(\"image/\"):\n                st.image(media, caption=\"Uploaded Image\", use_column_width=True)\n            \n            elif media.type == \"video/mp4\":\n                st.video(media)\n            else:\n                st.warning(\"Unsupported file type for preview.\")\n`;
+
+  const [showMenuCodeModal, setShowMenuCodeModal] = useState(false);
+  const [showMenuOutputModal, setShowMenuOutputModal] = useState(false);
+  const menuAppCode = `import streamlit as st\nfrom PIL import Image\nimport subprocess\nimport os\nimport openai\nimport platform\n\n# ========== API KEY ==========\nopenai.api_key = \"AIzaSyBcaSAM_AsYpUqsdjpZdZt6w61v2ZPS0Ag\"  # ✅ Put your actual API key here\n\n# ========== PAGE CONFIG ==========\nst.set_page_config(page_title=\"All-in-One Menu App\", layout=\"wide\", page_icon=\"🔹\")\n\n# ========== BACKGROUND FUNCTION ==========\ndef set_bg(image_url=None):\n    if image_url:\n        st.markdown(f\"\"\"\n            <style>\n            .stApp {{\n                background-image: url('{image_url}');\n                background-size: cover;\n                background-repeat: no-repeat;\n                background-attachment: fixed;\n            }}\n            </style>\n            \"\"\", unsafe_allow_html=True)\n\n# ========== PAGE DEFINITIONS ==========\n\ndef home():\n    set_bg(\"https://images.unsplash.com/photo-1518976024611-488aa8ef3492\")\n    st.title(\"📅 All-in-One Menu Based App\")\n    st.markdown(\"### Choose a functionality .\")\n\ndef linux_commands():\n    set_bg()\n    st.title(\"💻 Linux Command Executor\")\n    \n    st.markdown(f\"🖥️ Detected OS: `{platform.system()}`\")\n    st.markdown(\"\"\"\n    **ℹ️ Note:** This command box accepts basic Linux commands like `ls`, `pwd`, `cal`, etc. On Windows, some of them will be auto-mapped to Windows equivalents.\n    \"\"\")\n    \n    command = st.text_input(\"🔧 Enter a Linux command\")\n\n    if st.button(\"▶️ Run Command\"):\n        if command:\n            # Windows command mapping\n            if platform.system() == \"Windows\":\n                if command.strip() == \"ls\":\n                    command = \"dir\"\n                elif command.strip() == \"pwd\":\n                    command = \"cd\"\n                elif command.strip() == \"clear\":\n                    command = \"cls\"\n                elif command.strip() == \"cal\":\n                    st.error(\"❌ The `cal` command is not available on Windows.\")\n                    return\n\n            try:\n                result = os.popen(command).read()\n                if result.strip():\n                    st.code(result)\n                else:\n                    st.warning(\"✅ Command executed, but no output returned.\")\n            except Exception as e:\n                st.error(f\"❌ Error: {str(e)}\")\n\ndef docker_commands():\n    set_bg(\"https://miro.medium.com/v2/resize:fit:1358/1*FIeWJym9cXM0zTFs5l6y8g.png\")\n    st.title(\"🐳 Docker Command Executor\")\n    \n    st.markdown(\"Type any Docker command like `docker ps`, `docker images`, `docker run hello-world`, etc.\")\n    docker_cmd = st.text_input(\"🔧 Enter Docker Command\")\n\n    if st.button(\"▶️ Execute Docker Command\"):\n        if docker_cmd:\n            try:\n                # Run the command as a subprocess\n                result = subprocess.run(docker_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)\n                \n                if result.stdout:\n                    st.code(result.stdout, language=\"bash\")\n                if result.stderr:\n                    st.error(result.stderr)\n                if not result.stdout and not result.stderr:\n                    st.warning(\"No output returned.\")\n            except Exception as e:\n                st.error(f\"❌ Error executing command: {e}\")\n\nimport openai\n\nclient = openai.OpenAI(api_key=\"AIzaSyBcaSAM_AsYpUqsdjpZdZt6w61v2ZPS0Ag\")  # Replace with your key\n\ndef genai_model():\n    set_bg(\"https://images.unsplash.com/photo-1618411445308-e146f2ebd32e\")\n    st.title(\"🧠 GenAI Prompt Engine\")\n    st.subheader(\"Ask anything. Get instant AI answers.\")\n\n    model_name = st.text_input(\"🧠 Model\", value=\"gemini-2.5-flash\")\n    prompt = st.text_area(\"💬 Enter your prompt\")\n\n    if st.button(\"Generate Response\"):\n        if not prompt:\n            st.warning(\"Please enter a prompt.\")\n        else:\n            with st.spinner(\"Generating response...\"):\n                try:\n                    response = client.chat.completions.create(\n                        model=model_name,\n                        messages=[\n                            {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n                            {\"role\": \"user\", \"content\": prompt}\n                        ],\n                        temperature=0.7\n                    )\n                    answer = response.choices[0].message.content\n                    st.success(\"✅ Response Generated\")\n                    st.markdown(f\"**🔎 Prompt:** {prompt}\")\n                    st.markdown(\"**📝 Response:**\")\n                    st.code(answer)\n                except Exception as e:\n                    st.error(f\"❌ Error: {str(e)}\")\n\ndef ml_prediction():\n    set_bg(\"https://images.unsplash.com/photo-1581091870634-7f93c1aee9c4\")\n    st.title(\"🧬 ML Prediction Model\")\n    val = st.slider(\"Input Feature Value\", 0.0, 10.0, 5.0)\n    prediction = 2 * val + 1\n    st.success(f\"Predicted Output: {prediction}\")\n\ndef email_sender():\n    set_bg(\"https://images.unsplash.com/photo-1591012911207-3c3b29b3a3e1\")\n    st.title(\"📧 Email Sender\")\n    sender = st.text_input(\"Sender Email\")\n    receiver = st.text_input(\"Receiver Email\")\n    subject = st.text_input(\"Subject\")\n    body = st.text_area(\"Body\")\n    if st.button(\"Send Email\"):\n        st.success(\"Email sent successfully (mocked)\")\n\ndef whatsapp_sender():\n    set_bg(\"https://img.freepik.com/free-photo/whatsapp-3d-icon-podium-3d-rendering_494347-1005.jpg\")\n    st.title(\"📱 WhatsApp Message Sender\")\n    number = st.text_input(\"Phone Number\")\n    hour = st.number_input(\"Send Hour (24H)\", min_value=0, max_value=23, value=12)\n    minute = st.number_input(\"Send Minute\", min_value=0, max_value=59, value=0)\n    msg = st.text_area(\"Message\")\n    if st.button(\"Send Message\"):\n        st.success(f\"Message to {number} scheduled at {hour:02d}:{minute:02d} (mocked)\")\n\ndef calling_model():\n    set_bg(\"https://cdn.pixabay.com/photo/2020/04/09/13/24/telephone-5010975_1280.jpg\")\n    st.title(\"☎️ Calling Model\")\n    phone = st.text_input(\"Enter phone number to call\")\n    if st.button(\"Make Call\"):\n        st.success(f\"Calling {phone} (mocked)\")\n\ndef messaging_model():\n    set_bg()\n    st.title(\"📲 Messaging Model\")\n    number = st.text_input(\"Enter Number\")\n    msg = st.text_area(\"Enter Message\")\n    if st.button(\"Send SMS\"):\n        st.success(\"Message sent successfully (mocked)\")\n\ndef insta_post():\n    set_bg(\"https://images.unsplash.com/photo-1634942537033-1d39dd92db1c\")\n    st.title(\"📸 Instagram Poster\")\n    username = st.text_input(\"Instagram Username\")\n    password = st.text_input(\"Instagram Password\", type=\"password\")\n    photo = st.file_uploader(\"Upload Photo\")\n    caption = st.text_area(\"Enter Caption\")\n    if st.button(\"Post on Instagram\"):\n        st.success(f\"Posted to Instagram as {username} (mocked)\")\n\ndef linkedin_post():\n    set_bg()\n    st.title(\"📅 LinkedIn Poster\")\n    username = st.text_input(\"LinkedIn Username\")\n    content = st.text_area(\"Enter Content to Post\")\n    if st.button(\"Post on LinkedIn\"):\n        st.success(f\"Posted to LinkedIn as {username} (mocked)\")\n\n# ========== SIDEBAR MENU ==========\nst.sidebar.image(\"https://static.streamlit.io/examples/cat.jpg\", width=180)\nst.sidebar.markdown(\"## 📋 Navigation\")\nselected = st.sidebar.radio(\n    \"Go to\",\n    [\n        \"Home\", \"Linux Commands\", \"Docker Commands\", \"GenAI Model\",\n        \"ML Prediction\", \"Email Sender\", \"WhatsApp Sender\", \"Calling Model\",\n        \"Messaging Model\", \"Instagram Post\", \"LinkedIn Post\"\n    ]\n)\n\n# ========== ROUTING ==========\npages = {\n    \"Home\": home,\n    \"Linux Commands\": linux_commands,\n    \"Docker Commands\": docker_commands,\n    \"GenAI Model\": genai_model,\n    \"ML Prediction\": ml_prediction,\n    \"Email Sender\": email_sender,\n    \"WhatsApp Sender\": whatsapp_sender,\n    \"Calling Model\": calling_model,\n    \"Messaging Model\": messaging_model,\n    \"Instagram Post\": insta_post,\n    \"LinkedIn Post\": linkedin_post\n}\n\npages[selected]()  # Run selected page\n`;
 
   return (
     <section id="projects" className="section">
@@ -223,6 +235,16 @@ const ProjectsSection: React.FC = () => {
                             Output
                           </button>
                         )}
+                        {project.title === 'All-in-One Menu App' && project.viewCode && (
+                          <button className="view-code-btn" onClick={() => setShowMenuCodeModal(true)}>
+                            View Code
+                          </button>
+                        )}
+                        {project.title === 'All-in-One Menu App' && project.output && (
+                          <button className="output-btn" onClick={() => setShowMenuOutputModal(true)}>
+                            Output
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -306,6 +328,25 @@ const ProjectsSection: React.FC = () => {
             <img src="/insta.png" alt="Instagram Poster Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
             <p>This Streamlit app allows you to post to Instagram by entering your credentials, caption, and uploading an image or video. The post preview is shown after submission (mocked).</p>
             <button onClick={() => setShowInstaOutputModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showMenuCodeModal && (
+        <div className="modal-overlay" onClick={() => setShowMenuCodeModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>All-in-One Menu App - Streamlit Code</h3>
+            <pre style={{ maxHeight: '400px', overflow: 'auto', background: '#222', color: '#0ff', padding: '1rem', borderRadius: '8px' }}>{menuAppCode}</pre>
+            <button onClick={() => setShowMenuCodeModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showMenuOutputModal && (
+        <div className="modal-overlay" onClick={() => setShowMenuOutputModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>All-in-One Menu App - Output</h3>
+            <img src="/menu.png" alt="All-in-One Menu App Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+            <p>This Streamlit app provides a menu-based interface for Linux, Docker, GenAI, ML, Email, WhatsApp, Calling, Messaging, Instagram, and LinkedIn features. Each feature is accessible from the sidebar menu.</p>
+            <button onClick={() => setShowMenuOutputModal(false)} className="close-modal-btn">Close</button>
           </div>
         </div>
       )}
