@@ -12,6 +12,7 @@ interface Project {
 }
 
 const ProjectsSection: React.FC = () => {
+  // All useState hooks at the top
   const [showDropdowns, setShowDropdowns] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [showCodeModal, setShowCodeModal] = useState(false);
@@ -31,6 +32,7 @@ const ProjectsSection: React.FC = () => {
   const [showSmsCodeModal, setShowSmsCodeModal] = useState(false);
   const [showSmsOutputModal, setShowSmsOutputModal] = useState(false);
 
+  // All code string constants here (one copy each)
   const websiteDownloaderCode = `import streamlit as st\nimport requests\nfrom bs4 import BeautifulSoup\n\nst.set_page_config(page_title=\"Website Data Downloader\", layout=\"centered\")\nst.title(\"🌐 Download Website HTML Data\")\n\nurl = st.text_input(\"Enter website URL (with https://)\", value=\"https://example.com\")\n\nif st.button(\"Fetch Website Data\"):\n    try:\n        response = requests.get(url, timeout=10)\n        response.raise_for_status()\n        \n        html_content = response.text\n        soup = BeautifulSoup(html_content, \"html.parser\")\n        text_only = soup.get_text()\n\n        st.subheader(\"✅ Raw HTML:\")\n        st.code(html_content[:1000] + \"...\", language=\"html\")\n\n        st.subheader(\"🧾 Extracted Text:\")\n        st.text(text_only[:2000] + \"...\" if len(text_only) > 2000 else text_only)\n\n        st.download_button(\"📥 Download Full HTML\", data=html_content, file_name=\"website.html\", mime=\"text/html\")\n        st.download_button(\"📥 Download Extracted Text\", data=text_only, file_name=\"website.txt\", mime=\"text/plain\")\n        \n    except Exception as e:\n        st.error(f\"Error: {e}\")\n`;
 
   const techIcons = [
@@ -38,6 +40,7 @@ const ProjectsSection: React.FC = () => {
     '💾', '🔒', '🚀', '📡', '🎯', '💡', '🔥', '⚡', '🌟', '🎪'
   ];
 
+  // Only one projects array, with all Python projects
   const projects: Record<string, Project[]> = {
     Python: [
       {
