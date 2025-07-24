@@ -15,8 +15,8 @@ const ContactSection: React.FC = () => {
     {
       icon: <Phone size={24} />,
       label: 'Mobile',
-      value: '78806*****',
-      link: 'tel:78806*****'
+      value: '+91 7880692270',
+      link: 'tel:+917880692270'
     },
     {
       icon: <Github size={24} />,
@@ -155,7 +155,7 @@ const ContactSection: React.FC = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .contact-footer {
           background: 
             radial-gradient(circle at 30% 40%, rgba(0, 2, 144, 0.4) 0%, transparent 50%),
