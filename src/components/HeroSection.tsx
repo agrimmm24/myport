@@ -150,6 +150,15 @@ const HeroSection: React.FC = () => {
           padding: 4px;
           background: linear-gradient(45deg, #00FFFF, #FF00FF);
           box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+          animation: breathing 2s ease-in-out infinite;
+        }
+        @keyframes breathing {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.07);
+          }
         }
 
         .profile-photo {
