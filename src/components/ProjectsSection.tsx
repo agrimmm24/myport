@@ -31,6 +31,8 @@ const ProjectsSection: React.FC = () => {
   const [showEmailOutputModal, setShowEmailOutputModal] = useState(false);
   const [showSmsCodeModal, setShowSmsCodeModal] = useState(false);
   const [showSmsOutputModal, setShowSmsOutputModal] = useState(false);
+  const [showPythonGmailCodeModal, setShowPythonGmailCodeModal] = useState(false);
+  const [showPythonGmailOutputModal, setShowPythonGmailOutputModal] = useState(false);
 
   // All code string constants here (one copy each)
   const websiteDownloaderCode = `import streamlit as st\nimport requests\nfrom bs4 import BeautifulSoup\n\nst.set_page_config(page_title=\"Website Data Downloader\", layout=\"centered\")\nst.title(\"🌐 Download Website HTML Data\")\n\nurl = st.text_input(\"Enter website URL (with https://)\", value=\"https://example.com\")\n\nif st.button(\"Fetch Website Data\"):\n    try:\n        response = requests.get(url, timeout=10)\n        response.raise_for_status()\n        \n        html_content = response.text\n        soup = BeautifulSoup(html_content, \"html.parser\")\n        text_only = soup.get_text()\n\n        st.subheader(\"✅ Raw HTML:\")\n        st.code(html_content[:1000] + \"...\", language=\"html\")\n\n        st.subheader(\"🧾 Extracted Text:\")\n        st.text(text_only[:2000] + \"...\" if len(text_only) > 2000 else text_only)\n\n        st.download_button(\"📥 Download Full HTML\", data=html_content, file_name=\"website.html\", mime=\"text/html\")\n        st.download_button(\"📥 Download Extracted Text\", data=text_only, file_name=\"website.txt\", mime=\"text/plain\")\n        \n    except Exception as e:\n        st.error(f\"Error: {e}\")\n`;
@@ -95,7 +97,7 @@ const ProjectsSection: React.FC = () => {
         title: 'Send Email',
         techStack: ['Python', 'Streamlit', 'SMTP'],
         description: 'A Streamlit app to send styled emails with attachments. Includes custom background, file upload, and secure sending.',
-        image: '/email1.jpg',
+        image: '/email.jpg',
         viewCode: true,
         output: true
       },
@@ -104,6 +106,14 @@ const ProjectsSection: React.FC = () => {
         techStack: ['Python', 'Streamlit', 'Twilio'],
         description: 'Send SMS messages using Twilio API from a Streamlit app. Enter recipient, message, and send instantly.',
         image: '/msg1.jpeg',
+        viewCode: true,
+        output: true
+      },
+      {
+        title: 'Python Email Sender (Gmail)',
+        techStack: ['Python', 'Streamlit', 'smtplib', 'EmailMessage'],
+        description: 'Send emails using Gmail and Streamlit. Enter recipient, subject, and body, then send instantly using a secure app password.',
+        image: '/email1.jpg',
         viewCode: true,
         output: true
       }
@@ -184,6 +194,8 @@ const ProjectsSection: React.FC = () => {
   const emailSenderCode = `import streamlit as st\nimport smtplib\nfrom email.mime.multipart import MIMEMultipart\nfrom email.mime.text import MIMEText\nfrom email.mime.base import MIMEBase\nfrom email import encoders\n\n# ------------------ BACKGROUND CSS ------------------ #\ndef set_bg_image():\n    st.markdown(\"\"\"\n        <style>\n        .stApp {\n            background-image: url(\"https://static.vecteezy.com/system/resources/previews/000/543/942/non_2x/futuristic-blue-express-envelope-and-parcel-abstract-technology-background-business-quantum-internet-network-communication-and-high-speed-parcel-delivery-and-email-text-sending-message-service-vector.jpg\");\n            background-size: cover;\n            background-position: center;\n            background-repeat: no-repeat;\n            background-attachment: fixed;\n        }\n\n        .block-container {\n            background: rgba(255, 255, 255, 0.10);\n            backdrop-filter: blur(12px);\n            -webkit-backdrop-filter: blur(12px);\n            border-radius: 16px;\n            padding: 2rem;\n            margin-top: 50px;\n            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);\n            color: #ffffff;\n        }\n\n        input, textarea, .stTextInput > div > div, .stTextArea > div > div,\n        .stFileUploader > div, .stButton > button {\n            background-color: rgba(0, 0, 0, 0.5) !important;\n            color: #fff !important;\n            border-radius: 8px;\n        }\n\n        .stButton > button:hover {\n            background-color: rgba(0, 0, 0, 0.7) !important;\n        }\n\n        </style>\n    \"\"\", unsafe_allow_html=True)\n\n# Set background\nset_bg_image()\n\n# ------------------ Email UI ------------------ #\nwith st.container():\n    st.markdown('<div class="block-container">', unsafe_allow_html=True)\n\n    st.title("📨 Send Email")\n\n    receiver_email = st.text_input("📬 Receiver's Email")\n    subject = st.text_input("✉️ Email Subject")\n    body = st.text_area("📝 Email Body")\n    uploaded_files = st.file_uploader("📎 Upload PDF or JPG files", type=["pdf", "jpg", "jpeg"], accept_multiple_files=True)\n\n    send_button = st.button("🚀 Send Email")\n\n    sender_email = "sri.agrimsri@gmail.com"\n    sender_password = "tqgovynagziswluk"  # Use App Password\n\n    if send_button:\n        if not receiver_email or not subject or not body:\n            st.error("❗ Please fill in all required fields.")\n        else:\n            try:\n                msg = MIMEMultipart()\n                msg['From'] = sender_email\n                msg['To'] = receiver_email\n                msg['Subject'] = subject\n\n                msg.attach(MIMEText(body, 'plain'))\n\n                for file in uploaded_files:\n                    part = MIMEBase('application', 'octet-stream')\n                    part.set_payload(file.read())\n                    encoders.encode_base64(part)\n                    part.add_header('Content-Disposition', f'attachment; filename="{file.name}"')\n                    msg.attach(part)\n\n                server = smtplib.SMTP('smtp.gmail.com', 587)\n                server.starttls()\n                server.login(sender_email, sender_password)\n                server.send_message(msg)\n                server.quit()\n\n                st.success(f"✅ Email sent to {receiver_email} with {len(uploaded_files)} file(s) attached.")\n            except Exception as e:\n                st.error(f"❌ Failed to send email. Error: {str(e)}")\n\n    st.markdown('</div>', unsafe_allow_html=True)\n# ------------------ END OF EMAIL UI ------------------ \n`;
 
   const smsSenderCode = `import streamlit as st\nfrom twilio.rest import Client\n\n# Twilio credentials (DO NOT share these publicly)\nACCOUNT_SID = 'Account_sid'  # Replace with your Twilio Account SID\nAUTH_TOKEN = 'twilio_auth_token'                 # Replace with your Twilio Auth Token\nTWILIO_PHONE_NUMBER = 'twilio_number'                # Replace with your Twilio number\n\n# Streamlit UI setup\nst.set_page_config(page_title=\"📱 SMS Sender\", layout=\"centered\")\nst.title(\"📱 SMS Sender via Twilio\")\n\n# Input fields\nto_number = st.text_input(\"Enter recipient phone number (with country code)\", placeholder=\"+91XXXXXXXXXX\")\nmessage = st.text_area(\"Enter your message\")\n\n# Submit button\nif st.button(\"Send SMS\"):\n    if not to_number or not message:\n        st.warning(\"Please provide both phone number and message.\")\n    else:\n        try:\n            # Initialize Twilio client\n            client = Client(ACCOUNT_SID, AUTH_TOKEN)\n\n            # Send the SMS\n            message = client.messages.create(\n                body=message,\n                from_=TWILIO_PHONE_NUMBER,\n                to=to_number\n            )\n\n            st.success(f\"✅ Message sent! SID: {message.sid}\")\n        except Exception as e:\n            st.error(f\"❌ Failed to send message: {e}\")\n`;
+
+  const pythonEmailSenderCode = `import streamlit as st\nimport smtplib\nfrom email.message import EmailMessage\n\n# App password and sender email (hardcoded for security)\nAPP_PASSWORD = \"bbtkaoxlcnwvccft\"  # Replace this with your 16-digit Gmail app password\nSENDER_EMAIL = \"sri.agrimsri@gmail.com\"    # Replace with your Gmail\n\nst.set_page_config(page_title=\"Email Sender\", layout=\"centered\")\nst.title(\"\ud83d\udce7 Python Email Sender (Gmail)\")\n\n# User Inputs\nrecipient = st.text_input(\"Recipient Email Address\")\nsubject = st.text_input(\"Email Subject\")\nbody = st.text_area(\"Email Body\")\n\nif st.button(\"Send Email\"):\n    if not recipient or not subject or not body:\n        st.warning(\"Please fill in all fields.\")\n    else:\n        try:\n            # Construct email\n            msg = EmailMessage()\n            msg['Subject'] = subject\n            msg['From'] = SENDER_EMAIL\n            msg['To'] = recipient\n            msg.set_content(body)\n\n            # Send email\n            with smtplib.SMTP('smtp.gmail.com', 587) as smtp:\n                smtp.starttls()\n                smtp.login(SENDER_EMAIL, APP_PASSWORD)\n                smtp.send_message(msg)\n\n            st.success(f\"\u2705 Email successfully sent to {recipient}\")\n        except Exception as e:\n            st.error(f\"\u274c Failed to send email: {e}\")\n`;
 
   return (
     <section id="projects" className="section">
@@ -312,6 +324,16 @@ const ProjectsSection: React.FC = () => {
                         )}
                         {project.title === 'SMS Sender via Twilio' && project.output && (
                           <button className="output-btn" onClick={() => setShowSmsOutputModal(true)}>
+                            Output
+                          </button>
+                        )}
+                        {project.title === 'Python Email Sender (Gmail)' && project.viewCode && (
+                          <button className="view-code-btn" onClick={() => setShowPythonGmailCodeModal(true)}>
+                            View Code
+                          </button>
+                        )}
+                        {project.title === 'Python Email Sender (Gmail)' && project.output && (
+                          <button className="output-btn" onClick={() => setShowPythonGmailOutputModal(true)}>
                             Output
                           </button>
                         )}
@@ -474,6 +496,25 @@ const ProjectsSection: React.FC = () => {
             <img src="/msg.png" alt="SMS Sender Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
             <p>This Streamlit app lets you send SMS messages using Twilio. Enter the recipient's number and your message, then send instantly.</p>
             <button onClick={() => setShowSmsOutputModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showPythonGmailCodeModal && (
+        <div className="modal-overlay" onClick={() => setShowPythonGmailCodeModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Python Email Sender (Gmail) - Streamlit Code</h3>
+            <pre style={{ maxHeight: '400px', overflow: 'auto', background: '#222', color: '#0ff', padding: '1rem', borderRadius: '8px' }}>{pythonEmailSenderCode}</pre>
+            <button onClick={() => setShowPythonGmailCodeModal(false)} className="close-modal-btn">Close</button>
+          </div>
+        </div>
+      )}
+      {showPythonGmailOutputModal && (
+        <div className="modal-overlay" onClick={() => setShowPythonGmailOutputModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3>Python Email Sender (Gmail) - Output</h3>
+            <img src="/email.png" alt="Python Email Sender Output" style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }} />
+            <p>This Streamlit app allows you to send emails using your Gmail account. Enter the recipient's email, subject, and body, then send instantly using a secure app password.</p>
+            <button onClick={() => setShowPythonGmailOutputModal(false)} className="close-modal-btn">Close</button>
           </div>
         </div>
       )}
