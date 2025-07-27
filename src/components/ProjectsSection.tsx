@@ -185,7 +185,8 @@ function ProjectsSection() {
 
   const ramMonitorCode = `import streamlit as st\nimport psutil\nimport time\n\nst.set_page_config(page_title=\"RAM Monitor\", layout=\"centered\")\n\nst.title(\"💾 Real-Time RAM Monitor\")\n\nplaceholder = st.empty()\n\nwhile True:\n    mem = psutil.virtual_memory()\n    \n    total = mem.total / (1024 ** 3)\n    available = mem.available / (1024 ** 3)\n    used = mem.used / (1024 ** 3)\n    percent = mem.percent\n\n    with placeholder.container():\n        st.metric(label=\"Total RAM\", value=f\"{total:.2f} GB\")\n        st.metric(label=\"Used RAM\", value=f\"{used:.2f} GB\")\n        st.metric(label=\"Available RAM\", value=f\"{available:.2f} GB\")\n        st.progress(percent / 100.0, text=f\"{percent}% Used\")\n\n    time.sleep(1)\n`;
 
-     const instaPosterCode = `import streamlit as st\nst.set_page_config(page_title="Instagram Poster", page_icon="📷")`;
+  const instaPosterCode = `import streamlit as st
+  st.set_page_config(page_title="Instagram Poster", page_icon="📷")`;
     const menuAppCode = `import streamlit as st\nfrom PIL import Image\n...
 
 
