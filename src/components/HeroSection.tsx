@@ -88,9 +88,9 @@ const HeroSection: React.FC = () => {
           justify-content: center;
           padding: 2rem;
           background: 
-            radial-gradient(circle at 30% 40%, rgba(0, 2, 144, 0.4) 0%, transparent 50%),
-            radial-gradient(circle at 70% 80%, rgba(0, 0, 0, 0.6) 0%, transparent 50%),
-            linear-gradient(135deg, #000290 0%, #000000 100%);
+            radial-gradient(circle at 20% 30%, rgba(45, 45, 45, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(0, 0, 0, 0.8) 0%, transparent 50%),
+            linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
           position: relative;
           overflow: hidden;
         }
@@ -175,7 +175,7 @@ const HeroSection: React.FC = () => {
           text-transform: uppercase;
           letter-spacing: 3px;
           margin-bottom: 1rem;
-          color: #00FFFF;
+          color: #ffffff;
           cursor: pointer;
           transition: all 0.3s ease;
         }
@@ -186,7 +186,7 @@ const HeroSection: React.FC = () => {
 
         .hero-role {
           font-size: 1.2rem;
-          color: #00FFFF;
+          color: #ffffff;
           font-family: 'JetBrains Mono', monospace;
           margin-bottom: 2rem;
           min-height: 2rem;
@@ -206,8 +206,8 @@ const HeroSection: React.FC = () => {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          background: #00FFFF;
-          color: #010101;
+          background: #FF4C4C;
+          color: #FFFFFF;
           border: none;
           padding: 1rem 2rem;
           border-radius: 8px;
@@ -218,14 +218,14 @@ const HeroSection: React.FC = () => {
           letter-spacing: 1px;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+          box-shadow: 0 4px 15px rgba(255, 76, 76, 0.3);
         }
 
         .download-resume-btn:hover {
-          background: #FF00FF;
-          color: white;
+          background: #cc0000;
+          color: #FFFFFF;
           transform: translateY(-3px) scale(1.05);
-          box-shadow: 0 8px 25px rgba(255, 0, 255, 0.4);
+          box-shadow: 0 8px 25px rgba(204, 0, 0, 0.4);
         }
 
         @media (max-width: 768px) {

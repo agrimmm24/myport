@@ -95,7 +95,7 @@ const ExperienceSection: React.FC = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .experience-container {
           max-width: 1000px;
           width: 100%;
@@ -146,7 +146,7 @@ const ExperienceSection: React.FC = () => {
           font-size: 2.2rem;
           font-weight: 700;
           font-family: 'JetBrains Mono', monospace;
-          color: #FF00FF;
+          color: #ffffff;
           text-transform: uppercase;
           margin-bottom: 0.5rem;
           letter-spacing: 2px;
@@ -156,7 +156,7 @@ const ExperienceSection: React.FC = () => {
           font-size: 1.5rem;
           font-weight: 600;
           font-family: 'JetBrains Mono', monospace;
-          color: #00FFFF;
+          color: #ffffff;
           margin-bottom: 1rem;
         }
 
@@ -184,7 +184,7 @@ const ExperienceSection: React.FC = () => {
           font-size: 1.2rem;
           font-weight: 700;
           font-family: 'JetBrains Mono', monospace;
-          color: #00FFFF;
+          color: #ffffff;
           text-transform: uppercase;
           margin-bottom: 1rem;
           letter-spacing: 1px;

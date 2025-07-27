@@ -73,7 +73,7 @@ const BlogSection: React.FC = () => {
         ))}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .blog-container {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -166,7 +166,7 @@ const BlogSection: React.FC = () => {
           font-size: 1.3rem;
           font-weight: 700;
           font-family: 'JetBrains Mono', monospace;
-          color: #FF00FF;
+          color: #ffffff;
           text-transform: uppercase;
           margin-bottom: 1rem;
           letter-spacing: 1px;

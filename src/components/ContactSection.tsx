@@ -158,9 +158,9 @@ const ContactSection: React.FC = () => {
       <style>{`
         .contact-footer {
           background: 
-            radial-gradient(circle at 30% 40%, rgba(0, 2, 144, 0.4) 0%, transparent 50%),
+            radial-gradient(circle at 30% 40%, rgba(45, 45, 45, 0.4) 0%, transparent 50%),
             radial-gradient(circle at 70% 80%, rgba(0, 0, 0, 0.5) 0%, transparent 50%),
-            linear-gradient(135deg, #001a66 0%, #000033 100%);
+            linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
           padding: 4rem 2rem 2rem;
           border-top: 2px solid rgba(0, 255, 255, 0.3);
           position: relative;
@@ -174,7 +174,7 @@ const ContactSection: React.FC = () => {
           right: 0;
           bottom: 0;
           background: 
-            radial-gradient(circle at 20% 80%, rgba(0, 2, 144, 0.2) 0%, transparent 60%),
+            radial-gradient(circle at 20% 80%, rgba(45, 45, 45, 0.2) 0%, transparent 60%),
             radial-gradient(circle at 80% 20%, rgba(0, 0, 0, 0.3) 0%, transparent 50%);
           z-index: 0;
         }
@@ -193,7 +193,7 @@ const ContactSection: React.FC = () => {
           text-align: center;
           margin-bottom: 3rem;
           letter-spacing: 2px;
-          color: #00FFFF;
+          color: #ffffff;
         }
 
         .contact-container {
@@ -215,7 +215,7 @@ const ContactSection: React.FC = () => {
           font-weight: 700;
           font-family: 'JetBrains Mono', monospace;
           text-transform: uppercase;
-          color: #00FFFF;
+          color: #ffffff;
           margin-bottom: 2rem;
           letter-spacing: 1px;
           text-align: center;
@@ -345,7 +345,7 @@ const ContactSection: React.FC = () => {
         .contact-label {
           font-family: 'JetBrains Mono', monospace;
           font-weight: 700;
-          color: #00FFFF;
+          color: #ffffff;
           text-transform: uppercase;
           font-size: 0.9rem;
           letter-spacing: 1px;

@@ -37,7 +37,7 @@ const AboutSection: React.FC = () => {
         ))}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .cards-container {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -69,7 +69,7 @@ const AboutSection: React.FC = () => {
           font-weight: 700;
           font-family: 'JetBrains Mono', monospace;
           text-transform: uppercase;
-          color: #00FFFF;
+          color: #ffffff;
           margin-bottom: 1rem;
           letter-spacing: 1px;
         }

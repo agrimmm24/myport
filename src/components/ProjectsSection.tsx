@@ -194,7 +194,141 @@ function ProjectsSection() {
 
   const smsSenderCode = `import streamlit as st\nfrom twilio.rest import Client\n\n# Twilio credentials (DO NOT share these publicly)\nACCOUNT_SID = 'Account_sid'  # Replace with your Twilio Account SID\nAUTH_TOKEN = 'twilio_auth_token'                 # Replace with your Twilio Auth Token\nTWILIO_PHONE_NUMBER = 'twilio_number'                # Replace with your Twilio number\n\n# Streamlit UI setup\nst.set_page_config(page_title=\"📱 SMS Sender\", layout=\"centered\")\nst.title(\"📱 SMS Sender via Twilio\")\n\n# Input fields\nto_number = st.text_input(\"Enter recipient phone number (with country code)\", placeholder=\"+91XXXXXXXXXX\")\nmessage = st.text_area(\"Enter your message\")\n\n# Submit button\nif st.button(\"Send SMS\"):\n    if not to_number or not message:\n        st.warning(\"Please provide both phone number and message.\")\n    else:\n        try:\n            # Initialize Twilio client\n            client = Client(ACCOUNT_SID, AUTH_TOKEN)\n\n            # Send the SMS\n            message = client.messages.create(\n                body=message,\n                from_=TWILIO_PHONE_NUMBER,\n                to=to_number\n            )\n\n            st.success(f\"✅ Message sent! SID: {message.sid}\")\n        except Exception as e:\n            st.error(f\"❌ Failed to send message: {e}\")\n`;
 
-  const pythonEmailSenderCode = `import streamlit as st\nimport smtplib\nfrom email.message import EmailMessage\n\n# App password and sender email (hardcoded for security)\nAPP_PASSWORD = \"bbtkaoxlcnwvccft\"  # Replace this with your 16-digit Gmail app password\nSENDER_EMAIL = \"sri.agrimsri@gmail.com\"    # Replace with your Gmail\n\nst.set_page_config(page_title=\"Email Sender\", layout=\"centered\")\nst.title(\"\ud83d\udce7 Python Email Sender (Gmail)\")\n\n# User Inputs\nrecipient = st.text_input(\"Recipient Email Address\")\nsubject = st.text_input(\"Email Subject\")\nbody = st.text_area(\"Email Body\")\n\nif st.button(\"Send Email\"):\n    if not recipient or not subject or not body:\n        st.warning(\"Please fill in all fields.\")\n    else:\n        try:\n            # Construct email\n            msg = EmailMessage()\n            msg['Subject'] = subject\n            msg['From'] = SENDER_EMAIL\n            msg['To'] = recipient\n            msg.set_content(body)\n\n            # Send email\n            with smtplib.SMTP('smtp.gmail.com', 587) as smtp:\n                smtp.starttls()\n                smtp.login(SENDER_EMAIL, APP_PASSWORD)\n                smtp.send_message(msg)\n\n            st.success(f\"\u2705 Email successfully sent to {recipient}\")\n        except Exception as e:\n            st.error(f\"\u274c Failed to send email: {e}\")\n`;
+  const pythonEmailSenderCode = `import streamlit as st
+import smtplib
+from email.message import EmailMessage
+
+# App password and sender email (hardcoded for security)
+APP_PASSWORD = "bbtkaoxlcnwvccft"  # Replace this with your 16-digit Gmail app password
+SENDER_EMAIL = "sri.agrimsri@gmail.com"    # Replace with your Gmail
+
+st.set_page_config(page_title="Email Sender", layout="centered")
+st.title("\ud83d\udce7 Python Email Sender (Gmail)")
+
+# User Inputs
+recipient = st.text_input("Recipient Email Address")
+subject = st.text_input("Email Subject")
+body = st.text_area("Email Body")
+
+if st.button("Send Email"):
+    if not recipient or not subject or not body:
+        st.warning("Please fill in all fields.")
+    else:
+        try:
+            # Construct email
+            msg = EmailMessage()
+            msg['Subject'] = subject
+            msg['From'] = SENDER_EMAIL
+            msg['To'] = recipient
+            msg.set_content(body)
+
+            # Send email
+            with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+                smtp.starttls()
+                smtp.login(SENDER_EMAIL, APP_PASSWORD)
+                smtp.send_message(msg)
+
+            st.success(f"\u2705 Email successfully sent to {recipient}")
+        except Exception as e:
+            st.error(f"\u274c Failed to send email: {e}")
+`;
+
+  const instaPosterCode = `import streamlit as st
+from PIL import Image
+import io
+
+st.set_page_config(page_title="Instagram Poster", layout="centered")
+st.title("📸 Instagram Poster")
+
+# User inputs
+username = st.text_input("Instagram Username")
+password = st.text_input("Instagram Password", type="password")
+caption = st.text_area("Post Caption")
+uploaded_file = st.file_uploader("Upload Image or Video", type=["jpg", "jpeg", "png", "mp4", "mov"])
+
+if st.button("Post to Instagram"):
+    if not username or not password or not caption or not uploaded_file:
+        st.warning("Please fill in all fields and upload a file.")
+    else:
+        st.success("✅ Post uploaded successfully!")
+        st.info("Note: This is a mock implementation. In a real app, you would use Instagram's API.")
+        
+        # Show preview
+        if uploaded_file.type.startswith('image'):
+            image = Image.open(uploaded_file)
+            st.image(image, caption="Preview", use_column_width=True)
+        else:
+            st.video(uploaded_file)
+`;
+
+  const menuAppCode = `import streamlit as st
+import subprocess
+import os
+
+st.set_page_config(page_title="All-in-One Menu App", layout="wide")
+
+# Sidebar menu
+menu = st.sidebar.selectbox(
+    "Select Feature:",
+    ["Linux Commands", "Docker", "GenAI", "ML", "Email", "WhatsApp", "Calling", "Messaging", "Instagram", "LinkedIn"]
+)
+
+st.title("🛠️ All-in-One Menu App")
+
+if menu == "Linux Commands":
+    st.header("🐧 Linux Commands")
+    command = st.text_input("Enter Linux command:")
+    if st.button("Execute"):
+        try:
+            result = subprocess.run(command, shell=True, capture_output=True, text=True)
+            st.code(result.stdout)
+            if result.stderr:
+                st.error(result.stderr)
+        except Exception as e:
+            st.error(f"Error: {e}")
+
+elif menu == "Docker":
+    st.header("🐳 Docker")
+    docker_cmd = st.selectbox("Docker Command:", ["docker ps", "docker images", "docker run", "docker build"])
+    if docker_cmd == "docker run":
+        image = st.text_input("Image name:")
+        if st.button("Run Container"):
+            st.info(f"Running: docker run {image}")
+
+elif menu == "GenAI":
+    st.header("🤖 GenAI")
+    prompt = st.text_area("Enter your prompt:")
+    if st.button("Generate"):
+        st.write("AI Response: This is a mock response. In a real app, you would integrate with an AI API.")
+
+elif menu == "ML":
+    st.header("📊 Machine Learning")
+    st.write("ML features would be implemented here.")
+
+elif menu == "Email":
+    st.header("📧 Email")
+    st.write("Email features would be implemented here.")
+
+elif menu == "WhatsApp":
+    st.header("📱 WhatsApp")
+    st.write("WhatsApp features would be implemented here.")
+
+elif menu == "Calling":
+    st.header("📞 Calling")
+    st.write("Calling features would be implemented here.")
+
+elif menu == "Messaging":
+    st.header("💬 Messaging")
+    st.write("Messaging features would be implemented here.")
+
+elif menu == "Instagram":
+    st.header("📸 Instagram")
+    st.write("Instagram features would be implemented here.")
+
+elif menu == "LinkedIn":
+    st.header("💼 LinkedIn")
+    st.write("LinkedIn features would be implemented here.")
+`;
 
   return (
     <section id="projects" className="section">
@@ -573,8 +707,8 @@ function ProjectsSection() {
         }
 
         .explore-btn {
-          background: #00FFFF;
-          color: #010101;
+          background: #FF4C4C;
+          color: #FFFFFF;
           border: none;
           padding: 1.5rem 3rem;
           border-radius: 8px;
@@ -585,17 +719,17 @@ function ProjectsSection() {
           letter-spacing: 2px;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+          box-shadow: 0 4px 15px rgba(255, 76, 76, 0.3);
           position: relative;
           z-index: 100;
           pointer-events: auto;
         }
 
         .explore-btn:hover {
-          background: #FF00FF;
-          color: white;
+          background: #cc0000;
+          color: #FFFFFF;
           transform: translateY(-3px) scale(1.05);
-          box-shadow: 0 8px 25px rgba(255, 0, 255, 0.4);
+          box-shadow: 0 8px 25px rgba(204, 0, 0, 0.4);
         }
 
         .dropdowns-container {
@@ -613,8 +747,8 @@ function ProjectsSection() {
 
         .dropdown-btn {
           background: transparent;
-          color: #00FFFF;
-          border: 2px solid #00FFFF;
+          color: #FF4C4C;
+          border: 2px solid #FF4C4C;
           padding: 1rem 2rem;
           border-radius: 6px;
           font-family: 'JetBrains Mono', monospace;
@@ -639,8 +773,8 @@ function ProjectsSection() {
 
         .dropdown-btn:hover,
         .dropdown-btn.active {
-          background: #00FFFF;
-          color: #010101;
+          background: #FF4C4C;
+          color: #FFFFFF;
           transform: scale(1.05);
         }
 
@@ -698,7 +832,7 @@ function ProjectsSection() {
         .project-title {
           font-family: 'JetBrains Mono', monospace;
           font-weight: 700;
-          color: #FF00FF;
+          color: #ffffff;
           font-size: 1.2rem;
           margin-bottom: 0.8rem;
           text-transform: uppercase;
@@ -712,8 +846,8 @@ function ProjectsSection() {
         }
 
         .tech-tag {
-          background: rgba(0, 255, 255, 0.2);
-          color: #00FFFF;
+          background: rgba(255, 255, 255, 0.2);
+          color: #ffffff;
           padding: 0.3rem 0.8rem;
           border-radius: 12px;
           font-size: 0.8rem;
@@ -728,8 +862,8 @@ function ProjectsSection() {
         }
 
         .view-code-btn, .output-btn {
-          background: #FF00FF;
-          color: #fff;
+          background: #FF4C4C;
+          color: #FFFFFF;
           border: none;
           padding: 0.5rem 1.2rem;
           border-radius: 6px;
@@ -742,8 +876,8 @@ function ProjectsSection() {
           transition: all 0.3s ease;
         }
         .view-code-btn:hover, .output-btn:hover {
-          background: #00FFFF;
-          color: #010101;
+          background: #cc0000;
+          color: #FFFFFF;
         }
         .modal-overlay {
           position: fixed;

@@ -162,7 +162,7 @@ const EducationSection: React.FC = () => {
           font-size: 1.8rem;
           font-weight: 700;
           font-family: 'JetBrains Mono', monospace;
-          color: #FF00FF;
+          color: #ffffff;
           text-transform: uppercase;
           margin-bottom: 0.5rem;
           letter-spacing: 1px;
@@ -170,7 +170,7 @@ const EducationSection: React.FC = () => {
 
         .education-location {
           font-size: 1.1rem;
-          color: #00FFFF;
+          color: #ffffff;
           font-family: 'JetBrains Mono', monospace;
           margin-bottom: 0.3rem;
         }

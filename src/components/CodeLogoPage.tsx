@@ -39,7 +39,7 @@ const CodeLogoPage: React.FC<CodeLogoPageProps> = ({ onLogoClick }) => {
           left: 0;
           width: 100vw;
           height: 100vh;
-          background: linear-gradient(135deg, #000290 0%, #000000 100%);
+          background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
           display: flex;
           align-items: center;
           justify-content: center;
